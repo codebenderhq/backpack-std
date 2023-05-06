@@ -7,7 +7,7 @@ const script_middleware = async (pathname, req) => {
     let onServerResult;
     let prop;
 
-    const res = await import(`${window.extPath}/src/_app${_pathname}.js`);
+    const res = await import(`../../frame/src/_app/index.js`);
 
     if (res.onBuild) {
       onBuildResult = await res.onBuild();
