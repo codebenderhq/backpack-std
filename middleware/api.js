@@ -66,8 +66,6 @@ const api_middleware = async (pathname, request) => {
         paths.pop();
       }
 
-      
-
       const apiPath = `${paths.reverse().join("/")}${subPath}`;
 
       // added server cors
@@ -79,43 +77,46 @@ const api_middleware = async (pathname, request) => {
         data = await get_data(request);
       }
 
-      const {default: apiMethod} = await import(`${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`)
-      const json = await apiMethod(request,data.result)
-  
-      const status = json.status
-      delete json.status
+      const { default: apiMethod } = await import(
+        `${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`
+      );
+      const json = await apiMethod(request, data.result);
 
+      const status = json.status;
+      delete json.status;
 
-      if (request.method === 'POST') {
-  
-        const returnPath = json.uri
-        const redirectHost = json.redirect
-        delete json.redirect
-        delete json.uri
-        delete json.body
-        delete json.status
-        const searchParam = new URLSearchParams(json)
- 
+      if (request.method === "POST") {
+        const returnPath = json.uri;
+        const redirectHost = json.redirect;
+        delete json.redirect;
+        delete json.uri;
+        delete json.body;
+        delete json.status;
+        const searchParam = new URLSearchParams(json);
+
         // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
-       
-        const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
 
-        console.log(Location)
+        const Location = `https://${redirectHost ? redirectHost : host}${
+          returnPath ? returnPath : "/status"
+        }?${searchParam.toString()}`;
+
+        console.log(Location);
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
         // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
         const headers = {
           Location,
-          'set-cookie': json?.setCookie ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`: null,
-        }
+          "set-cookie": json?.setCookie
+            ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
+            : null,
+        };
         //       'Access-Control-Allow-Origin': `${isFormType ? 'app.sauveur.xyz' : '*' }`,
         // return Response.redirect(Location)
         // convert this to jsx for customizability
         //             'Access-Control-Allow-Origin': `${isFormType ? 'app.sauveur.xyz' : '*' }`
- 
- 
-        return new Response(null,{
+
+        return new Response(null, {
           status: 302,
-          headers
+          headers,
         });
       }
 
