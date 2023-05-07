@@ -21,14 +21,17 @@ const asset_middlware = async (pathname, request) => {
       // const content = await file.readable;
       if (type === "css") {
         const css = await Deno.readTextFile(file_path);
+      
         const result = await postcss([tailwindcss, autoprefixer]).process(css, {
           from: undefined,
         });
 
+        
         let { code, map } = transform({
           code: new TextEncoder().encode(result.css),
           minify: true,
         });
+ 
 
         return new Response(new TextDecoder().decode(code), {
           headers: {
