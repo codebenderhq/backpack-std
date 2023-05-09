@@ -69,16 +69,16 @@ const api_middleware = async (pathname, request) => {
       const apiPath = `${paths.reverse().join("/")}${subPath}`;
 
       // added server cors
-      if (!is_authenticated(auth) && !isFormType) {
-        throw new Error("Unotharized");
-      }
+      // if (!is_authenticated(auth) && !isFormType) {
+      //   throw new Error("Unotharized");
+      // }
 
       if (request.method !== "GET") {
         data = await get_data(request);
       }
 
       const { default: apiMethod } = await import(
-        `${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`
+        `app/${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`
       );
       const json = await apiMethod(request, data.result);
 
@@ -125,6 +125,7 @@ const api_middleware = async (pathname, request) => {
       });
     } catch (err) {
       // log();
+      console.log(err)
       const _err = {
         title: `SERVER:API:ERROR:${request.url}`,
         msg: err.message,

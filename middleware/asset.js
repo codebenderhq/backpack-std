@@ -15,13 +15,14 @@ const asset_middlware = async (pathname, request) => {
       const type = pathname.split(".").pop();
       const content_type = `text/${type}`;
       const file_path = `${window.extPath}/src/public${pathname}`;
-
+  
       // find out if there is a leak here
       // const file = await Deno.open(file_path, { read: true });
       // const content = await file.readable;
       if (type === "css") {
+        
         const css = await Deno.readTextFile(file_path);
-      
+
         const result = await postcss([tailwindcss, autoprefixer]).process(css, {
           from: undefined,
         });
