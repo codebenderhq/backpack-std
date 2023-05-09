@@ -6,6 +6,8 @@ let isError = false;
 let _path = `${window._cwd ? window._cwd : "."}/src/_app/`;
 const errorPath = `${_path}/error/pages/index.html`;
 
+console.log(_path)
+
 const html_middleware = async (pathname, req, path = _path) => {
   if (!pathname.includes(".")) {
     let paramPage = "";
