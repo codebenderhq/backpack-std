@@ -21,6 +21,7 @@ const middleware = async (request,cwd, info) => {
   const { pathname } = new URL(request.url);
   console.log(cwd)
   window._cwd = cwd
+  console.log(window._cwd)
   window.extPath = window?._cwd ? window._cwd : Deno.cwd();
 
   try {
