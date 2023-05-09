@@ -19,10 +19,9 @@ const service = async (ext, pathname, req) => {
 
 const middleware = async (request,cwd, info) => {
   const { pathname } = new URL(request.url);
-  console.log(cwd)
   window._cwd = cwd
-  console.log(window._cwd)
-  window.extPath = window?._cwd ? window._cwd : Deno.cwd();
+  console.log('window cwd',window._cwd, 'cwd',cwd,'window',window)
+  window.extPath = cwd ? cwd : Deno.cwd();
 
   try {
     // const extensions = Deno.env.get("env")
