@@ -59,6 +59,7 @@ const api_middleware = async (pathname, request) => {
       let data = {};
       const auth = request.headers.get("authorization");
       const host = request.headers.get("host");
+      const { protocol } = new URL(request.url);
       const referer = request.headers.get("referer");
       const paths = pathname.split("/");
       let subPath = "";
@@ -96,7 +97,7 @@ const api_middleware = async (pathname, request) => {
 
         // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
 
-        const Location = `https://${redirectHost ? redirectHost : host}${
+        const Location = `${protocol}//${redirectHost ? redirectHost : host}${
           returnPath ? returnPath : "/status"
         }?${searchParam.toString()}`;
 
@@ -125,7 +126,7 @@ const api_middleware = async (pathname, request) => {
       });
     } catch (err) {
       // log();
-      console.log(err)
+      console.log(err);
       const _err = {
         title: `SERVER:API:ERROR:${request.url}`,
         msg: err.message,
