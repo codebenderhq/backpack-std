@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 import "https://deno.land/std/dotenv/load.ts";
 import * as extensions from "./middleware/index.js";
+import "./lib/index.ts";
 
 let resp;
 
@@ -25,12 +26,7 @@ const middleware = async (request, info) => {
     await service(Object.values(extensions), pathname, request);
     return resp;
   } catch (err) {
-    console.log(Deno.cwd());
-    console.log(err);
-
-    // window.dispactLog
-    //  ? window.dispatchLog({ msg: err.message, err })
-    //  : console.log(err);
+    err.log();
     return Response.json({ msg: "Error:LEVEL1", err: err }, { status: 500 });
   }
 };
