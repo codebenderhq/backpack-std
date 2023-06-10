@@ -15,7 +15,7 @@ export default async (...body) => {
       ...body,
     };
   }
- 
+
   // Persist an object at the users/alice key.
   await kv.set(key, value);
   console.log(id, ...body);

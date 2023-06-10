@@ -23,9 +23,9 @@ const middleware = async (request, info) => {
   window.extPath = window?._cwd ? window._cwd : Deno.cwd();
 
   try {
-    globalThis.logger(request)
+    globalThis.logger(request);
     await service(Object.values(extensions), pathname, request);
-    globalThis.logger(resp)
+    globalThis.logger(resp);
     return resp;
   } catch (err) {
     err.log();
