@@ -34,7 +34,6 @@ const asset_middlware = async (pathname, request) => {
         });
 
         return new Response(new TextDecoder().decode(code), {
-          bodyUsed: false,
           headers: {
             "content-type": content_type,
             "access-control-allow-origin": "*",
