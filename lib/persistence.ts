@@ -112,7 +112,7 @@ globalThis.onload = (e: Event): void => {
         this.dbName = this.constructor.name;
         const data = this.data;
 
-        const currentData = await kv.get(key);
+        const currentRes = await kv.get(key);
         //    orama search init
         const res = await kv.get(["orama", this.dbName]);
         if (res.value) {
@@ -125,18 +125,18 @@ globalThis.onload = (e: Event): void => {
           this.oramaDB = await create({ schema: this.schema });
         }
 
-        await remove(this.oramaDB, currentData.value.cacheId);
+        await remove(this.oramaDB, currentRes.value.cacheId);
         const cacheId = await insert(this.oramaDB, data);
         const JSONIndex = await persist(this.oramaDB, "json");
         await kv.set(["orama", this.dbName], JSONIndex);
 
         const updatedData = {
-          ...currentData,
+          ...currentRes.value,
           ...data
         }
         updatedData.cacheId = cacheId;
-        logger(key, data);
-        return await kv.atomic().check(res).set(key, updatedData).commit();
+        logger(`about to save to ${key}`, updatedData);
+        return await kv.atomic().check(currentRes).set(key, updatedData).commit();
       } catch (e) {
         e.log("issue saving", e.message);
       }
