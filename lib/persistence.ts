@@ -103,6 +103,44 @@ globalThis.onload = (e: Event): void => {
         e.log("initaite error", e);
       }
     };
+    DB.prototype.update = async function (key) {
+      // Open the default database for the script.
+      try {
+        logger("attempting to save", this);
+
+        const kv = await Deno.openKv();
+        this.dbName = this.constructor.name;
+        const data = this.data;
+
+        const currentData = await kv.get(key);
+        //    orama search init
+        const res = await kv.get(["orama", this.dbName]);
+        if (res.value) {
+          this.oramaDB = await restore("json", res.value);
+        } else {
+          for (const [key, value] of Object.entries(data)) {
+            this.schema[key] = typeof value;
+          }
+
+          this.oramaDB = await create({ schema: this.schema });
+        }
+
+        await remove(this.oramaDB, currentData.value.cacheId);
+        const cacheId = await insert(this.oramaDB, data);
+        const JSONIndex = await persist(this.oramaDB, "json");
+        await kv.set(["orama", this.dbName], JSONIndex);
+
+        const updatedData = {
+          ...currentData,
+          ...data
+        }
+        updatedData.cacheId = cacheId;
+        logger(key, data);
+        return await kv.atomic().check(res).set(key, updatedData).commit();
+      } catch (e) {
+        e.log("issue saving", e.message);
+      }
+    };
     DB.prototype.delete = async function (id) {
       try {
         // Open the default database for the script.
