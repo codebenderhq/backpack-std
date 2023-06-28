@@ -9,6 +9,7 @@ const script_middleware = async (pathname, req) => {
 
     const res = await import(`app/${window.extPath}/src/_app${_pathname}.js`);
 
+    //    onBuild does not seem important anymore deprecate it
     if (res.onBuild) {
       onBuildResult = await res.onBuild();
     }

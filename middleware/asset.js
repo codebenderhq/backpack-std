@@ -20,6 +20,8 @@ const asset_middlware = async (pathname, request) => {
       // const file = await Deno.open(file_path, { read: true });
       // const content = await file.readable;
       if (type === "css") {
+        //TODO: when a change is made here testing using the native object protoype for persistence shoudl be tried again
+
         const css = await Deno.readTextFile(file_path);
 
         const result = await postcss([tailwindcss, autoprefixer]).process(css, {
@@ -40,18 +42,10 @@ const asset_middlware = async (pathname, request) => {
           },
         });
       } else {
-        // return new Response(content,{
-        //   headers:{
-        //     "content-type": request.headers.get('accept').split(',')[0],
-        //     "access-control-allow-origin": "*",
-        //     "Access-Control-Allow-Headers": "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
-        //   }
-        // });
-
         return await serveFile(request, file_path);
       }
     } catch (err) {
-      console.info(err.message);
+      err.log();
     }
   }
 };
