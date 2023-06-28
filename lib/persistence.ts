@@ -27,6 +27,7 @@ globalThis.onload = (e: Event): void => {
         }
 
         const newInstance = await restore("json", res.value);
+        kv.close()
         return await search(newInstance, {
           term: term,
           properties: "*",
@@ -34,6 +35,17 @@ globalThis.onload = (e: Event): void => {
       }
     }
 
+    DB.prototype.kv = async function (func) {
+      try {
+        // Open the default database for the script.
+        const kv = await Deno.openKv();
+        this.dbName = this.constructor.name
+
+        return await func(kv)
+      } catch (e) {
+        console.log("initaite error", e.message);
+      }
+    };
     DB.prototype.list = async function () {
       try {
         // Open the default database for the script.
@@ -48,6 +60,7 @@ globalThis.onload = (e: Event): void => {
           );
         }
 
+        kv.close()
         return data;
       } catch (e) {
         console.log("initaite error", e.message);
@@ -83,6 +96,7 @@ globalThis.onload = (e: Event): void => {
         data.cacheId = cacheId;
         logger(key, data);
         await kv.set(key, data);
+        kv.close()
         return id;
       } catch (e) {
         e.log("issue saving", e.message);
@@ -98,6 +112,7 @@ globalThis.onload = (e: Event): void => {
         const res = await kv.get(key);
         logger("key", res.key);
         logger("value", res.value);
+        kv.close()
         return res;
       } catch (e) {
         e.log("initaite error", e);
@@ -136,7 +151,9 @@ globalThis.onload = (e: Event): void => {
         }
         updatedData.cacheId = cacheId;
         logger(`about to save to ${key}`, updatedData);
-        return await kv.atomic().check(currentRes).set(key, updatedData).commit();
+        const commitRes = await kv.atomic().check(currentRes).set(key, updatedData).commit()
+        kv.close()
+        return commitRes;
       } catch (e) {
         e.log("issue saving", e.message);
       }
@@ -157,6 +174,7 @@ globalThis.onload = (e: Event): void => {
         // Persist an object at the users/alice key.
         const res = await kv.delete(key);
         logger("deleted data of:", key);
+        kv.close()
         return res;
       } catch (e) {
         e.log("initaite error", e);
@@ -179,6 +197,7 @@ globalThis.onload = (e: Event): void => {
         const JSONIndex = await persist(newInstance, "json");
         await kv.set(["orama", this.dbName], JSONIndex);
 
+        kv.close()
         return true;
       } catch (e) {
         console.log("initaite error", e.message);
