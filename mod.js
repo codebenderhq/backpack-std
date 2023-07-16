@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std/http/server.ts";
 import "https://deno.land/std/dotenv/load.ts";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
@@ -18,8 +17,13 @@ const service = async (ext, pathname, req) => {
   }
 };
 
-const middleware = async (request, info) => {
-  const { pathname } = new URL(request.url);
+/**
+* Web Framework, this makes all requests go through FRAME
+* @param {Request} request
+* @return {Response} response
+*/
+export const web = async (request, info) => {
+  const { pathname } = req(request);
   window.extPath = window?._cwd ? window._cwd : Deno.cwd();
 
   try {
@@ -33,9 +37,26 @@ const middleware = async (request, info) => {
   }
 };
 
-if (import.meta.main) {
-  const port = 9090;
-  serve(middleware, { port });
+/**
+* Deconstruct the request object into valuble information
+*
+* @param {Request} request
+
+* @return {pathname: string} 
+*/
+export const req = (request) => {
+  const { pathname, hostname, username, search, searchParams } = new URL(request.url);
+  
+  return {pathname, hostname,username, search, searchParams}
 }
 
-export default middleware;
+
+if (import.meta.main) {
+  const [type] = Deno.args;
+
+  if(type === "--web"){
+    console.log("serve web version")
+    Deno.serve(web);
+  }
+
+}

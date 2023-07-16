@@ -5,8 +5,6 @@ import logger from "./logger.ts";
 
 //https://deno.com/manual@v1.34.0/runtime/kv
 globalThis.onload = (e: Event): void => {
-  logger(`got ${e.type} event in onload function (imported)`, "doll");
-
   if (Object.isExtensible(Object.prototype)) {
     class DB {
       schema = {};
