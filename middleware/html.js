@@ -21,6 +21,7 @@ const html_middleware = async (pathname, req) => {
         pathname.includes("@")
       ) {
         _pageSrc = `${path}${pathname}/pages/index.${ext}`;
+        paramPage = `${path}${pathname.split("/")[1]}/pages/@.${ext}`;
       } else if (pathname !== "/") {
         _pageSrc = `${path}${pathname.split("/")[1]}/pages/${
           pathname.split("/")[2]
