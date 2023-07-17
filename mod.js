@@ -112,7 +112,8 @@ if (import.meta.main) {
   if(src === "--web"){
     Deno.serve(web)
   }else{
-    const entry_point = new URL(`${Deno.cwd()}/${src}`, import.meta.url).toString()
+//    const entry_point = new URL(`${Deno.cwd()}/${src}`, import.meta.url).toString()
+    const entry_point = `${Deno.cwd()}/${src}`
 
     launch(entry_point)
   }
