@@ -34,7 +34,8 @@ export const web = async (request, info) => {
     return resp;
   } catch (err) {
     err.log();
-    return Response.json({ msg: "Error:LEVEL1", err: err }, { status: 500 });
+    console.log(err)
+    return Response.json({ msg: "Error:LEVEL1", err: err.message }, { status: 500 });
   }
 };
 
