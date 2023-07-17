@@ -479,10 +479,15 @@
     "https://deno.land/x/expect@v0.3.0/expect.ts": "5e6717eddc9df376f7b2c9be6403e016130bb2edbb1acd261a2d6ea9608ee196",
     "https://deno.land/x/expect@v0.3.0/matchers.ts": "a37ef4577739247af77a852cdcd69484f999a41ad86ec16bb63a88a7a47a2372",
     "https://deno.land/x/expect@v0.3.0/mock.ts": "562d4b1d735d15b0b8e935f342679096b64fe452f86e96714fe8616c0c884914",
-    "https://deno.land/x/expect@v0.3.0/mod.ts": "0304d2430e1e96ba669a8495e24ba606dcc3d152e1f81aaa8da898cea24e36c2"
+    "https://deno.land/x/expect@v0.3.0/mod.ts": "0304d2430e1e96ba669a8495e24ba606dcc3d152e1f81aaa8da898cea24e36c2",
+    "https://esm.sh/react-dom@18.2.0/server": "ea9d1990dc787a7fcafdbd981923840eca1b27983ae8a082a312ede5b3ee9f49",
+    "https://esm.sh/react@18.2.0": "742d8246041966ba1137ec8c60888c35882a9d2478bce63583875f86c1e3687c",
+    "https://esm.sh/stable/react@18.2.0/deno/react.mjs": "a5a73ee24acca4744ee22c51d9357f31968d1f684ce253bde222b4e26d09f49f",
+    "https://esm.sh/v124/react-dom@18.2.0/deno/server.js": "687d1b8ca3a73bdf42750098db291810fcb4b21c1b8761c66cc94ac9334e71a8"
   },
   "npm": {
     "specifiers": {
+      "@js-temporal/polyfill": "@js-temporal/polyfill@0.4.4",
       "@orama/orama": "@orama/orama@1.0.6",
       "@orama/plugin-data-persistence": "@orama/plugin-data-persistence@1.0.6",
       "autoprefixer": "autoprefixer@10.4.14_postcss@8.4.25",
@@ -524,6 +529,13 @@
         "dependencies": {
           "@jridgewell/resolve-uri": "@jridgewell/resolve-uri@3.1.0",
           "@jridgewell/sourcemap-codec": "@jridgewell/sourcemap-codec@1.4.14"
+        }
+      },
+      "@js-temporal/polyfill@0.4.4": {
+        "integrity": "sha512-2X6bvghJ/JAoZO52lbgyAPFj8uCflhTo2g7nkFzEQdXd/D8rEeD4HtmTEpmtGCva260fcd66YNXBOYdnmHqSOg==",
+        "dependencies": {
+          "jsbi": "jsbi@4.3.0",
+          "tslib": "tslib@2.6.0"
         }
       },
       "@msgpack/msgpack@2.8.0": {
@@ -780,6 +792,10 @@
       },
       "jiti@1.18.2": {
         "integrity": "sha512-QAdOptna2NYiSSpv0O/BwoHBSmz4YhpzJHyi+fnMRTXFjp7B8i/YG5Z8IfusxB1ufjcD2Sre1F3R+nX3fvy7gg==",
+        "dependencies": {}
+      },
+      "jsbi@4.3.0": {
+        "integrity": "sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==",
         "dependencies": {}
       },
       "lightningcss-darwin-arm64@1.21.5": {
@@ -1067,6 +1083,10 @@
       },
       "ts-interface-checker@0.1.13": {
         "integrity": "sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==",
+        "dependencies": {}
+      },
+      "tslib@2.6.0": {
+        "integrity": "sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==",
         "dependencies": {}
       },
       "update-browserslist-db@1.0.11_browserslist@4.21.9": {

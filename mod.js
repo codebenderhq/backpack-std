@@ -51,10 +51,15 @@ export const req = (request) => {
   return {pathname, hostname,username, search, searchParams}
 }
 
+
 globalThis.aki = {
   req,
   deploy,
   web
+}
+
+const initHost = (request) => {
+  globalThis.aki.user_request = req(request)
 }
 
 
@@ -62,24 +67,20 @@ const launch =  async (entry_point) => {
   console.log('loading',entry_point);
   const exec = (await import(entry_point)).default;
 
-//  Prod Enviroment Load
+  const options = {
+    port: 8001
+  }
+
+//  Prod Enviroment Configuration
   if(Deno.env.get("env") !== "dev"){
     const decoder = new TextDecoder("utf-8");
 
-    const port = Deno.env.get("env") === "dev" ? 9091 : 443;
-    const cert = decoder.decode(await Deno.readFile(Deno.env.get("CERT")));
-    const key =  decoder.decode(await Deno.readFile(Deno.env.get("KEY")));
-
-    const options = {
-      port,
-      key,
-      cert,
-    };
-
-    Deno.serve(options, exec);
+    options.port = 443;
+    options.cert = decoder.decode(await Deno.readFile(Deno.env.get("CERT")));
+    options.key  = decoder.decode(await Deno.readFile(Deno.env.get("KEY")));
 
     //ACME service
-    Deno.serve({port:Deno.env.get("env") === "dev" ? 9003 : 80},(req) => {
+    Deno.serve({port: 80},(req) => {
       const { pathname } = new URL(req.url);
 
       console.log(req);
@@ -98,13 +99,23 @@ const launch =  async (entry_point) => {
     })
   }
 
-  Deno.serve(exec)
+  Deno.serve(options,(request) => {
+    initHost(request)
+    return exec(request)
+  })
 }
 
 if (import.meta.main) {
 
   const [src] = Deno.args;
-  const entry_point = new URL(`${Deno.cwd()}/${src}`, import.meta.url).toString()
 
-  launch(entry_point)
+  if(src === "--web"){
+    Deno.serve(web)
+  }else{
+    const entry_point = new URL(`${Deno.cwd()}/${src}`, import.meta.url).toString()
+
+    launch(entry_point)
+  }
+
+  console.log('aki launched')
 }
