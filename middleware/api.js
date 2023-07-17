@@ -51,8 +51,8 @@ const get_data = async (request) => {
 const api_middleware = async (pathname, request) => {
   const isFormType =
     request.headers.get("content-type") === "application/x-www-form-urlencoded";
-  const isApiCall = pathname.includes("api") ||
-    request.headers.get("host").includes("api");
+  const isApiCall = pathname?.includes("api") ||
+    request.headers.get("host")?.includes("api");
   if (isApiCall || isFormType) {
     let response;
     try {
