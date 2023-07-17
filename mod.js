@@ -106,7 +106,6 @@ const launch =  async (entry_point) => {
 }
 
 if (import.meta.main) {
-
   const [src] = Deno.args;
 
   if(src === "--web"){
@@ -114,6 +113,5 @@ if (import.meta.main) {
   }else{
     launch(src)
   }
-
   console.log('aki launched')
 }
