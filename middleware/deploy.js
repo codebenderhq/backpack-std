@@ -21,7 +21,7 @@ const deploy = async(request) => {
             { type: "module" },
             );
         
-        deployWorker.postMessage({ path: appPath });
+        deployWorker.postMessage({ path: appPath, name });
 
         console.timeEnd("saving file");
         return new Response("deployed");
