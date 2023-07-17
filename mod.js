@@ -65,7 +65,7 @@ const initHost = (request) => {
 
 const launch =  async (entry_point) => {
   console.log('loading',entry_point);
-  const exec = (await import(entry_point)).default;
+  const exec = (await import(`app/${entry_point}`)).default;
 
   const options = {
     port: 8001
@@ -112,10 +112,7 @@ if (import.meta.main) {
   if(src === "--web"){
     Deno.serve(web)
   }else{
-//    const entry_point = new URL(`${Deno.cwd()}/${src}`, import.meta.url).toString()
-    const entry_point = `${Deno.cwd()}${src}`
-
-    launch(entry_point)
+    launch(src)
   }
 
   console.log('aki launched')
