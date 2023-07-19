@@ -9,7 +9,7 @@ secure, reliable, and scalable applications that meet their business needs.
 
 - [ ] add site visitor trackor, providing personalized and new experiences to
       your site visitors
-  - [ ] check if the site visit is from an old a new person
+  - [ ] check if the site visit is from an old or a new person
 
 ### Core
 
