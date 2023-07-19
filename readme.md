@@ -5,5 +5,11 @@ reliable, and scalable applications that meet their business needs.
 
 ## Roadmap
 
-- [ ] add builtin to deploy server
+### Aki Features
+- [ ] add site visitor trackor, providing personalized and new experiences to your site visitors
+    - [ ] check if the site visit is from an old a new person
+    
+
+### Core
+- [x] add built in deploy service
 - [ ] add background worker job to the std
