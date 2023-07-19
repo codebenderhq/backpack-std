@@ -1,6 +1,5 @@
 export default async (...body) => {
-
-  try{
+  try {
     const kv = await Deno.openKv();
     const id = Date.now();
     const key = ["Log", id];
@@ -20,9 +19,7 @@ export default async (...body) => {
 
     // Persist an object at the users/alice key.
     await kv.set(key, value);
-  } catch (err){
-    console.error(err.message)
+  } catch (err) {
+    console.error(err.message);
   }
-
-}
-
+};
