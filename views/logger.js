@@ -13,7 +13,13 @@ const logView = async (request) => {
          
         for await (const res of log) logs.push(res);
         logs.sort().reverse();
-        return Response.json(logs)
+
+        let logView = "";
+        logs.forEach(log => {
+         logView += `${log.value.type} \n ${JSON.stringify(log.value.data)} \n`
+        })
+
+        return new Response(logView)
     }
 }
 

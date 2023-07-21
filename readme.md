@@ -5,6 +5,10 @@ secure, reliable, and scalable applications that meet their business needs.
 
 ## Roadmap
 
+### Tech Debt
+- [ ] improve teh desccion logic for extensions
+- [ ] protect logs with secret key
+
 ### Aki Features
 
 - [ ] add site visitor trackor, providing personalized and new experiences to
@@ -19,7 +23,6 @@ secure, reliable, and scalable applications that meet their business needs.
 ### Finanace
 - [ ] wallet creation
 - [ ] conduit integration
-
 
 
 ### Office

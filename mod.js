@@ -28,9 +28,11 @@ const webLogs = async(req,res) => {
   const request = await req
   const response = await res
 
+  const referer = request.headers.get('referer')
 //  if(request.method === "POST") console.log(request)
+//  console.log(request)
 
-  logger({request:{method:request.method, uri: request.url},response: {status: response.status} });
+  logger.info('request/response',{request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
 }
 /**
  * Web Framework, this makes all requests go through FRAME
@@ -46,8 +48,7 @@ export const web = async (request, info) => {
     webLogs(request,resp)
     return resp;
   } catch (err) {
-    err.log();
-    console.log(err);
+    logger.info(err);
     return Response.json({ msg: "Error:LEVEL1", err: err.message }, {
       status: 500,
     });

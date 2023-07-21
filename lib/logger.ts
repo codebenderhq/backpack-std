@@ -1,4 +1,4 @@
-export default async (...body) => {
+const logger = async (type,...body) => {
   try {
     const kv = await Deno.openKv();
     const id = Date.now();
@@ -7,12 +7,12 @@ export default async (...body) => {
 
     if (typeof body[0] === "object") {
       value = {
-        type: "info",
+        type: type ? type : "info",
         data: {...body[0]},
       };
     } else {
       value = {
-        type: "info",
+        type:  type ? type : "info",
         ...body,
       };
     }
@@ -24,3 +24,11 @@ export default async (...body) => {
     console.error(err.message);
   }
 };
+
+
+export default {
+  info: logger,
+  request : () => {
+
+  }
+}
