@@ -8,7 +8,7 @@ export default async (...body) => {
     if (typeof body[0] === "object") {
       value = {
         type: "info",
-        ...body[0],
+        data: {...body[0]},
       };
     } else {
       value = {
@@ -17,6 +17,7 @@ export default async (...body) => {
       };
     }
 
+    
     // Persist an object at the users/alice key.
     await kv.set(key, value);
   } catch (err) {

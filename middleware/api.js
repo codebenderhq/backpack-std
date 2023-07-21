@@ -76,6 +76,7 @@ const api_middleware = async (pathname, request) => {
 
       if (request.method !== "GET") {
         data = await get_data(request);
+        logger({...data})
       }
 
       const { default: apiMethod } = await import(
@@ -125,14 +126,12 @@ const api_middleware = async (pathname, request) => {
         status,
       });
     } catch (err) {
-      // log();
       console.log(err);
-      const _err = {
+      logger({
         title: `SERVER:API:ERROR:${request.url}`,
         msg: err.message,
-        err,
-      };
-      window.dispatchLog({ ..._err });
+        err}
+        );
       throw new Error(`SERVER:API:ERROR:${request.url}`);
     }
 

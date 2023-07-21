@@ -15,3 +15,29 @@ secure, reliable, and scalable applications that meet their business needs.
 
 - [x] add built in deploy service
 - [ ] add background worker job to the std
+
+### Finanace
+- [ ] wallet creation
+- [ ] conduit integration
+
+
+
+### Office
+- [ ] mail client
+- [ ] view mail
+- [ ] send mail
+
+
+
+### Studio
+- [ ] Support uploading of content
+- [ ] images
+- [ ] videos
+- [ ] audio
+
+- [ ] Support products and services upload
+
+### Embeded Development (Coming Soon)
+Being able to talk to low level primitive machines would be a dream
+
+

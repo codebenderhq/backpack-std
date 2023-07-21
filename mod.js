@@ -2,11 +2,16 @@ import "https://deno.land/std/dotenv/load.ts";
 import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
+import logView from "./views/logger.js";
 
 let resp;
 
 const service = async (ext, pathname, req) => {
   resp = null;
+  if(pathname === "/logs" && req.method === "GET"){
+    resp = logView(req)
+  }
+
   if (!resp) {
     for (const element of ext) {
       const _resp = await element(pathname, req);
@@ -18,6 +23,15 @@ const service = async (ext, pathname, req) => {
   }
 };
 
+
+const webLogs = async(req,res) => {
+  const request = await req
+  const response = await res
+
+//  if(request.method === "POST") console.log(request)
+
+  logger({request:{method:request.method, uri: request.url},response: {status: response.status} });
+}
 /**
  * Web Framework, this makes all requests go through FRAME
  * @param {Request} request
@@ -28,9 +42,8 @@ export const web = async (request, info) => {
   window.extPath = window?._cwd ? window._cwd : Deno.cwd();
 
   try {
-    globalThis.logger(request);
     await service(Object.values(extensions), pathname, request);
-    globalThis.logger(resp);
+    webLogs(request,resp)
     return resp;
   } catch (err) {
     err.log();
