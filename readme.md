@@ -8,6 +8,7 @@ secure, reliable, and scalable applications that meet their business needs.
 ### Tech Debt
 - [ ] improve teh desccion logic for extensions
 - [ ] protect logs with secret key
+- [ ] update readme file to help with getting started with Aki
 
 ### Aki Features
 
@@ -26,18 +27,11 @@ secure, reliable, and scalable applications that meet their business needs.
 
 
 ### Office
-- [ ] mail client
 - [ ] view mail
 - [ ] send mail
 
 
-
-### Studio
-- [ ] Support uploading of content
-- [ ] images
-- [ ] videos
-- [ ] audio
-
+### Bye
 - [ ] Support products and services upload
 
 ### Embeded Development (Coming Soon)
