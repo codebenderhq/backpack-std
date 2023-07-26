@@ -2,7 +2,7 @@ import logger from "./logger.ts";
 
 Error.prototype.log = async function () {
   //    console.log(this)
-  logger(
+  logger.info("error",
     {
       cause: this.cause,
       msg: this.message,

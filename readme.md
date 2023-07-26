@@ -9,6 +9,7 @@ secure, reliable, and scalable applications that meet their business needs.
 - [ ] improve teh desccion logic for extensions
 - [ ] protect logs with secret key
 - [ ] update readme file to help with getting started with Aki
+- [ ] include verbose comments on code
 
 ### Aki Features
 
@@ -19,7 +20,9 @@ secure, reliable, and scalable applications that meet their business needs.
 ### Core
 
 - [x] add built in deploy service
-- [ ] add background worker job to the std
+- [ ] add background worker job to web (framework)
+- [ ] enable deploy based on secret key
+- [ ] create example folder
 
 ### Finanace
 - [ ] wallet creation

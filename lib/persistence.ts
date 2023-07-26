@@ -67,7 +67,7 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.save = async function () {
       // Open the default database for the script.
       try {
-        logger("attempting to save", this);
+        logger.info("db/save",{message:"attempting to save", obj:this});
 
         const kv = await Deno.openKv();
         const id = this.id || crypto.randomUUID();
@@ -92,7 +92,7 @@ globalThis.onload = (e: Event): void => {
         await kv.set(["orama", this.dbName], JSONIndex);
 
         data.cacheId = cacheId;
-        logger(key, data);
+        logger.info("db/save",{key, data});
         await kv.set(key, data);
         kv.close();
         return id;
@@ -108,8 +108,7 @@ globalThis.onload = (e: Event): void => {
         const key = [this.constructor.name, id];
         // Persist an object at the users/alice key.
         const res = await kv.get(key);
-        logger("key", res.key);
-        logger("value", res.value);
+        logger.info("db/read", {value:res.value})
         kv.close();
         return res;
       } catch (e) {
@@ -119,7 +118,8 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.update = async function (key) {
       // Open the default database for the script.
       try {
-        logger("attempting to save", this);
+
+        logger.info("db/update", {message:"attempting to save", obj:this})
 
         const kv = await Deno.openKv();
         this.dbName = this.constructor.name;
@@ -148,7 +148,7 @@ globalThis.onload = (e: Event): void => {
           ...data,
         };
         updatedData.cacheId = cacheId;
-        logger(`about to save to ${key}`, updatedData);
+        logger.info("db/update", {message:"about to save ", obj:updatedData})
         const commitRes = await kv.atomic().check(currentRes).set(
           key,
           updatedData,
@@ -174,7 +174,7 @@ globalThis.onload = (e: Event): void => {
 
         // Persist an object at the users/alice key.
         const res = await kv.delete(key);
-        logger("deleted data of:", key);
+        logger.info("db/delete", {message:"deleted data of:", obj:key})
         kv.close();
         return res;
       } catch (e) {
