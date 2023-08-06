@@ -18,7 +18,7 @@ NB: there is a difference between a computer scientist and a developer don’t g
 
 `coming soon`
 
-### Tech Debt
+## Tech Debt
 - [ ] improve the desccion logic for extensions
 - [ ] protect logs with secret key
 - [ ] update readme file to help with getting started with oomph
