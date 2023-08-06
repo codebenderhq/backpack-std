@@ -18,8 +18,6 @@ NB: there is a difference between a computer scientist and a developer don’t g
 
 `coming soon`
 
-## Roadmap
-
 ### Tech Debt
 - [ ] improve the desccion logic for extensions
 - [ ] protect logs with secret key
