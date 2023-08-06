@@ -1,43 +1,28 @@
-# AKI
+# oomph
 
-backpack/std is a suite of libraries designed to enable developers to create
-secure, reliable, and scalable applications that meet their business needs.
+you don’t need a textbook to be a developer, more importantly you don’t learn code to get a job
+
+You learn code for the same reason you learned to read and write
+
+It is a way for you to communicate, your beliefs
+
+Express your passion and build value not just for yourself but for others
+
+And that is what oomph aims to help you get right, building solutions that not only improve your life but those of your friends  too
+
+What do you want to build
+
+NB: there is a difference between a computer scientist and a developer don’t get it twisted
+
+## Getting Started
+
+`coming soon`
 
 ## Roadmap
 
 ### Tech Debt
-- [ ] improve teh desccion logic for extensions
+- [ ] improve the desccion logic for extensions
 - [ ] protect logs with secret key
-- [ ] update readme file to help with getting started with Aki
+- [ ] update readme file to help with getting started with oomph
 - [ ] include verbose comments on code
-
-### Aki Features
-
-- [ ] add site visitor trackor, providing personalized and new experiences to
-      your site visitors
-  - [ ] check if the site visit is from an old or a new person
-
-### Core
-
-- [x] add built in deploy service
-- [ ] add background worker job to web (framework)
-- [ ] enable deploy based on secret key
-- [ ] create example folder
-
-### Finanace
-- [ ] wallet creation
-- [ ] conduit integration
-
-
-### Office
-- [ ] view mail
-- [ ] send mail
-
-
-### Bye
-- [ ] Support products and services upload
-
-### Embeded Development (Coming Soon)
-Being able to talk to low level primitive machines would be a dream
-
 
