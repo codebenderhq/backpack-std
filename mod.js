@@ -32,6 +32,7 @@ const webLogs = async(req,res) => {
 //  if(request.method === "POST") console.log(request)
 //  console.log(request)
 
+
   logger.info('request/response',{request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
 }
 /**
@@ -45,6 +46,7 @@ export const web = async (request, info) => {
 
   try {
     await service(Object.values(extensions), pathname, request);
+    resp = resp ? resp : new Response('Not Found', {status: "404"});
     webLogs(request,resp)
     return resp;
   } catch (err) {
@@ -84,6 +86,7 @@ const launch = async (entry_point) => {
   console.log("loading", entry_point);
   const exec = (await import(`app/${entry_point}`)).default;
 
+  console.log(Deno.cwd())
   const options = {
     port: 8001,
   };
@@ -126,7 +129,12 @@ if (import.meta.main) {
   const [src] = Deno.args;
 
   if (src === "--web") {
-    Deno.serve(web);
+    try{
+      Deno.serve(web);
+    }catch{
+      Deno.serve({ port: 9000 },web);
+    }
+
   } else {
     launch(src);
   }
