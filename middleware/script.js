@@ -7,7 +7,8 @@ const script_middleware = async (pathname, req) => {
     let onServerResult;
     let prop;
 
-    const res = await import(`app/${window.extPath}/src/_app${_pathname}.js`);
+    const import_url = `app/${window.extPath}/src/_app${_pathname}.js`.replace('//','/')
+    const res = await import(import_url);
 
     //    onBuild does not seem important anymore deprecate it
     if (res.onBuild) {
