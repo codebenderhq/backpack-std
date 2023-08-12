@@ -33,7 +33,7 @@ const webLogs = async(req,res) => {
 //  console.log(request)
 
 
-  logger.info('request/response',{request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
+  oomph.logger.info('request/response',{request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
 }
 /**
  * Web Framework, this makes all requests go through FRAME
@@ -50,7 +50,7 @@ export const web = async (request, info) => {
     webLogs(request,resp)
     return resp;
   } catch (err) {
-    logger.info(err);
+    err.log();
     return Response.json({ msg: "Error:LEVEL1", err: err.message }, {
       status: 500,
     });

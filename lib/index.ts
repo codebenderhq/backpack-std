@@ -4,4 +4,4 @@ import logger from "./logger.ts";
 
 console.log("observabilty loaded into app");
 
-globalThis.logger = logger;
+globalThis.oomph.logger = logger;
