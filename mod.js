@@ -72,14 +72,14 @@ export const req = (request) => {
   return { pathname, hostname, username, search, searchParams };
 };
 
-globalThis.aki = {
+globalThis.oomph = {
   req,
   deploy,
   web,
 };
 
 const initHost = (request) => {
-  globalThis.aki.user_request = req(request);
+  globalThis.oomph.user_request = req(request);
 };
 
 const launch = async (entry_point) => {
@@ -138,5 +138,5 @@ if (import.meta.main) {
   } else {
     launch(src);
   }
-  console.log("aki launched");
+  console.log("oomph launched");
 }
