@@ -3,35 +3,36 @@ import { create, insert, remove, search } from "npm:@orama/orama";
 import { persist, restore } from "npm:@orama/plugin-data-persistence";
 import logger from "./logger.ts";
 
+class DB {
+  schema = {};
+  dbName;
+  oramaDB;
+  //  for now search everything
+
+  constructor() {
+    this.dbName = this.constructor.name;
+  }
+
+  async search(term) {
+    const kv = await Deno.openKv();
+    const res = await kv.get(["orama", this.dbName]);
+
+    if (!res.value) {
+      return [];
+    }
+
+    const newInstance = await restore("json", res.value);
+    kv.close();
+    return await search(newInstance, {
+      term: term,
+      properties: "*",
+    });
+  }
+}
 //https://deno.com/manual@v1.34.0/runtime/kv
 globalThis.onload = (e: Event): void => {
   if (Object.isExtensible(Object.prototype)) {
-    class DB {
-      schema = {};
-      dbName;
-      oramaDB;
-      //  for now search everything
 
-      constructor() {
-        this.dbName = this.constructor.name;
-      }
-
-      async search(term) {
-        const kv = await Deno.openKv();
-        const res = await kv.get(["orama", this.dbName]);
-
-        if (!res.value) {
-          return [];
-        }
-
-        const newInstance = await restore("json", res.value);
-        kv.close();
-        return await search(newInstance, {
-          term: term,
-          properties: "*",
-        });
-      }
-    }
 
     DB.prototype.kv = async function (func) {
       try {
@@ -202,6 +203,7 @@ globalThis.onload = (e: Event): void => {
         console.log("initaite error", e.message);
       }
     };
-    globalThis.oomph.db = DB;
   }
 };
+
+export {DB}

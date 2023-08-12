@@ -3,6 +3,7 @@ import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
 import logView from "./views/logger.js";
+import {logger, DB} from "./lib/index.ts"
 
 let resp;
 
@@ -33,7 +34,7 @@ const webLogs = async(req,res) => {
 //  console.log(request)
 
 
-  oomph.logger.info('request/response',{request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
+  logger.info('request/response',{request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
 }
 /**
  * Web Framework, this makes all requests go through FRAME
@@ -76,6 +77,8 @@ globalThis.oomph = {
   req,
   deploy,
   web,
+  logger,
+  DB
 };
 
 const initHost = (request) => {

@@ -1,7 +1,9 @@
-import "./persistence.ts";
+import {DB} from "./persistence.ts";
 import "./error.ts";
 import logger from "./logger.ts";
 
 console.log("observabilty loaded into app");
 
-globalThis.oomph.logger = logger;
+export {logger, DB}
+
+
