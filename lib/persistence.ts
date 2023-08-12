@@ -202,6 +202,6 @@ globalThis.onload = (e: Event): void => {
         console.log("initaite error", e.message);
       }
     };
-    globalThis.DB = DB;
+    globalThis.oomph.db = DB;
   }
 };
