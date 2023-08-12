@@ -1,6 +1,6 @@
 import { readerFromStreamReader } from "https://deno.land/std/streams/mod.ts";
 const deploy = async (request) => {
-  const { pathname, searchParams } = aki.req(request);
+  const { pathname, searchParams } = oomph.req(request);
 
   if (pathname === "/deploy" && request.method === "POST") {
     console.time("saving file");
