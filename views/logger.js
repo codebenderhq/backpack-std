@@ -1,5 +1,5 @@
 const logView = async (request) => {
-    const { pathname } = aki.req(request);
+    const { pathname } = oomph.req(request);
     
     if (pathname === "/logs" && request.method === "GET") {
    
