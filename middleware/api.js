@@ -98,7 +98,7 @@ const api_middleware = async (pathname, request) => {
 
         // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
 
-        const Location = `${protocol}//${redirectHost ? redirectHost : host}${
+        const Location = `${
           returnPath ? returnPath : "/status"
         }?${searchParam.toString()}`;
 
