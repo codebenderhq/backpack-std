@@ -76,7 +76,7 @@ const api_middleware = async (pathname, request) => {
 
       if (request.method !== "GET") {
         data = await get_data(request);
-        logger.info({...data})
+        oomph.logger.info({...data})
       }
 
       const { default: apiMethod } = await import(
@@ -127,7 +127,7 @@ const api_middleware = async (pathname, request) => {
       });
     } catch (err) {
       console.log(err);
-      logger.info({
+      oomph.logger.info({
         title: `SERVER:API:ERROR:${request.url}`,
         msg: err.message,
         err}
