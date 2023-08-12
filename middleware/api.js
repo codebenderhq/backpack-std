@@ -98,11 +98,11 @@ const api_middleware = async (pathname, request) => {
 
         // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
 
-        const Location = `${
+        const Location = `${redirectHost ? `https://${redirectHost}` : ''}${
           returnPath ? returnPath : "/status"
         }?${searchParam.toString()}`;
 
-        console.log(Location);
+        console.log('redirect to',Location);
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
         // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
         const headers = {
