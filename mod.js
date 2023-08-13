@@ -30,9 +30,6 @@ const webLogs = async(req,res, info) => {
   const response = await res
 
   const referer = request.headers.get('referer')
-//  if(request.method === "POST") console.log(request)
-//  console.log(request)
-
 
   logger.info('request/response',{info:info?.remoteAddr,request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
 }
@@ -44,7 +41,7 @@ const webLogs = async(req,res, info) => {
 export const web = async (request, info) => {
   const { pathname } = req(request);
   window.extPath = window?._cwd ? window._cwd : Deno.cwd();
-
+ 
   try {
     await service(Object.values(extensions), pathname, request);
     resp = resp ? resp : new Response('Not Found', {status: "404"});
@@ -89,7 +86,6 @@ const launch = async (entry_point) => {
   console.log("loading", entry_point);
   const exec = (await import(`app/${entry_point}`)).default;
 
-  console.log(Deno.cwd())
   const options = {
     port: 8001,
   };
@@ -122,9 +118,9 @@ const launch = async (entry_point) => {
     });
   }
 
-  Deno.serve(options, (request) => {
+  Deno.serve(options, (request, info) => {
     initHost(request);
-    return exec(request);
+    return exec(request, info);
   });
 };
 
