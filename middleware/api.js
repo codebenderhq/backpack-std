@@ -76,7 +76,7 @@ const api_middleware = async (pathname, request) => {
 
       if (request.method !== "GET") {
         data = await get_data(request);
-        oomph.logger.info({...data})
+        oomph.logger.info({ ...data });
       }
 
       const { default: apiMethod } = await import(
@@ -98,11 +98,11 @@ const api_middleware = async (pathname, request) => {
 
         // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
 
-        const Location = `${redirectHost ? `https://${redirectHost}` : ''}${
+        const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
           returnPath ? returnPath : "/status"
         }?${searchParam.toString()}`;
 
-        console.log('redirect to',Location);
+        console.log("redirect to", Location);
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
         // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
         const headers = {
@@ -130,8 +130,8 @@ const api_middleware = async (pathname, request) => {
       oomph.logger.info({
         title: `SERVER:API:ERROR:${request.url}`,
         msg: err.message,
-        err}
-        );
+        err,
+      });
       throw new Error(`SERVER:API:ERROR:${request.url}`);
     }
 

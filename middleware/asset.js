@@ -46,7 +46,7 @@ const asset_middlware = async (pathname, request) => {
       }
     } catch (err) {
       err.log();
-      throw new Error('File Does Not Exist')
+      throw new Error("File Does Not Exist");
     }
   }
 };

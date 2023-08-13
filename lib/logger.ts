@@ -1,4 +1,4 @@
-const logger = async (type,...body) => {
+const logger = async (type, ...body) => {
   try {
     const kv = await Deno.openKv();
     const id = Date.now();
@@ -8,16 +8,15 @@ const logger = async (type,...body) => {
     if (typeof body[0] === "object") {
       value = {
         type: type ? type : "info",
-        data: {...body[0]},
+        data: { ...body[0] },
       };
     } else {
       value = {
-        type:  type ? type : "info",
+        type: type ? type : "info",
         ...body,
       };
     }
 
-    
     // Persist an object at the users/alice key.
     await kv.set(key, value);
   } catch (err) {
@@ -25,10 +24,8 @@ const logger = async (type,...body) => {
   }
 };
 
-
 export default {
   info: logger,
-  request : () => {
-
-  }
-}
+  request: () => {
+  },
+};

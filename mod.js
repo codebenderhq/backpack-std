@@ -3,14 +3,14 @@ import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
 import logView from "./views/logger.js";
-import {logger, DB} from "./lib/index.ts"
+import { DB, logger } from "./lib/index.ts";
 
 let resp;
 
 const service = async (ext, pathname, req) => {
   resp = null;
-  if(pathname === "/logs" && req.method === "GET"){
-    resp = logView(req)
+  if (pathname === "/logs" && req.method === "GET") {
+    resp = logView(req);
   }
 
   if (!resp) {
@@ -24,15 +24,18 @@ const service = async (ext, pathname, req) => {
   }
 };
 
+const webLogs = async (req, res, info) => {
+  const request = await req;
+  const response = await res;
 
-const webLogs = async(req,res, info) => {
-  const request = await req
-  const response = await res
+  const referer = request.headers.get("referer");
 
-  const referer = request.headers.get('referer')
-
-  logger.info('request/response',{info:info?.remoteAddr,request:{method:request.method, uri: request.url, referer},response: {status: response.status} });
-}
+  logger.info("request/response", {
+    info: info?.remoteAddr,
+    request: { method: request.method, uri: request.url, referer },
+    response: { status: response.status },
+  });
+};
 /**
  * Web Framework, this makes all requests go through FRAME
  * @param {Request} request
@@ -41,11 +44,11 @@ const webLogs = async(req,res, info) => {
 export const web = async (request, info) => {
   const { pathname } = req(request);
   window.extPath = window?._cwd ? window._cwd : Deno.cwd();
- 
+
   try {
     await service(Object.values(extensions), pathname, request);
-    resp = resp ? resp : new Response('Not Found', {status: "404"});
-    webLogs(request,resp, info)
+    resp = resp ? resp : new Response("Not Found", { status: "404" });
+    webLogs(request, resp, info);
     return resp;
   } catch (err) {
     err.log();
@@ -75,7 +78,7 @@ globalThis.oomph = {
   deploy,
   web,
   logger,
-  DB
+  DB,
 };
 
 const initHost = (request) => {
@@ -118,15 +121,13 @@ const launch = async (entry_point) => {
   }
 
   Deno.serve(options, (request, info) => {
-
-    try{
+    try {
       initHost(request);
       return exec(request, info);
-    } catch (err){
-      err.log()
-      return new Response('Not Found', {status:404})
+    } catch (err) {
+      err.log();
+      return new Response("Not Found", { status: 404 });
     }
-
   });
 };
 
@@ -134,12 +135,11 @@ if (import.meta.main) {
   const [src] = Deno.args;
 
   if (src === "--web") {
-    try{
+    try {
       Deno.serve(web);
-    }catch{
-      Deno.serve({ port: 9000 },web);
+    } catch {
+      Deno.serve({ port: 9000 }, web);
     }
-
   } else {
     launch(src);
   }
