@@ -102,7 +102,6 @@ const launch = async (entry_point) => {
     Deno.serve({ port: 80 }, (req) => {
       const { pathname } = new URL(req.url);
 
-      console.log(req);
       const host = req.headers.get("host");
 
       if (pathname.includes(".well-known")) {
@@ -119,8 +118,15 @@ const launch = async (entry_point) => {
   }
 
   Deno.serve(options, (request, info) => {
-    initHost(request);
-    return exec(request, info);
+
+    try{
+      initHost(request);
+      return exec(request, info);
+    } catch (err){
+      err.log()
+      return new Response('Not Found', {status:404})
+    }
+
   });
 };
 

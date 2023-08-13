@@ -23,4 +23,5 @@ NB: there is a difference between a computer scientist and a developer don’t g
 - [ ] protect logs with secret key
 - [ ] update readme file to help with getting started with oomph
 - [ ] include verbose comments on code
+- [ ] open kv db at a (specific path)[https://deno.land/api@v1.36.1?s=Deno.openKv&unstable=]
 
