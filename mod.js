@@ -1,3 +1,4 @@
+import {serve, serveTls} from "https://deno.land/std/http/server.ts";
 import "https://deno.land/std/dotenv/load.ts";
 import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
@@ -98,11 +99,11 @@ const launch = async (entry_point) => {
     const decoder = new TextDecoder("utf-8");
 
     options.port = 443;
-    options.cert = decoder.decode(await Deno.readFile(Deno.env.get("CERT")));
-    options.key = decoder.decode(await Deno.readFile(Deno.env.get("KEY")));
+    options.cert = Deno.env.get("CERT");
+    options.key = Deno.env.get("KEY");
 
     //ACME service
-    Deno.serve({ port: 80 }, (req) => {
+    serve((req) => {
       const { pathname } = new URL(req.url);
 
       const host = req.headers.get("host");
@@ -113,10 +114,10 @@ const launch = async (entry_point) => {
           Location: `https://${host.replace("www.", "")}${pathname}`,
         },
       });
-    });
+      },{ port: 80 });
   }
 
-  Deno.serve(options, (request, info) => {
+  serveTls((request, info) => {
     try {
       initHost(request);
       return exec(request, info);
@@ -124,7 +125,7 @@ const launch = async (entry_point) => {
       err.log();
       return new Response("Not Found", { status: 404 });
     }
-  });
+  },options);
 };
 
 if (import.meta.main) {
@@ -132,9 +133,9 @@ if (import.meta.main) {
 
   if (src === "--web") {
     try {
-      Deno.serve(web);
+      serve(web);
     } catch {
-      Deno.serve({ port: 9000 }, web);
+      serve(web,{ port: 9000 });
     }
   } else {
     launch(src);
