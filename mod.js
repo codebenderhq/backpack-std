@@ -99,8 +99,8 @@ const launch = async (entry_point) => {
     const decoder = new TextDecoder("utf-8");
 
     options.port = 443;
-    options.cert = Deno.env.get("CERT");
-    options.key = Deno.env.get("KEY");
+    options.cert = decoder.decode(await Deno.readFile(Deno.env.get("CERT")));
+    options.key = decoder.decode(await Deno.readFile(Deno.env.get("KEY")));
 
     //ACME service
     serve((req) => {
