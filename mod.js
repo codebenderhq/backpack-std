@@ -1,4 +1,4 @@
-import {serve, serveTls} from "https://deno.land/std/http/server.ts";
+import {serve, serveTls} from "https://deno.land/std@0.198.0/http/server.ts";
 import "https://deno.land/std/dotenv/load.ts";
 import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
@@ -30,9 +30,9 @@ const webLogs = async (req, res, info) => {
   const response = await res;
 
   const referer = request.headers.get("referer");
-
+ 
   logger.info("request/response", {
-    info: info?.remoteAddr,
+    info: info,
     request: { method: request.method, uri: request.url, referer },
     response: { status: response.status },
   });
@@ -135,7 +135,7 @@ if (import.meta.main) {
     try {
       serve(web);
     } catch {
-      serve(web,{ port: 9000 });
+      serve(web,{ port: 9001 });
     }
   } else {
     launch(src);
