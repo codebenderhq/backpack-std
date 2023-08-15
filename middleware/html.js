@@ -20,13 +20,9 @@ const html_middleware = async (pathname, req) => {
       const pathArrays = pathname.split("/");
       pathArrays.shift();
 
-      console.log(pathArrays, pathArrays.length)
-      console.log(pathArrays.length === 1 && pathArrays[0] !== "" && !pathname.includes("@") ||
-        pathname.includes("@") && pathArrays.length !== 1)
-
-
       if (
-        pathArrays.length === 1 && pathArrays[0] !== "" && !pathname.includes("@") ||
+        pathArrays.length === 1 && pathArrays[0] !== "" &&
+          !pathname.includes("@") ||
         pathname.includes("@") && pathArrays.length !== 1
       ) {
         _pageSrc = `${path}${pathname}/pages/index.${ext}`;
