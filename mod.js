@@ -1,10 +1,10 @@
-import {serve, serveTls} from "https://deno.land/std@0.198.0/http/server.ts";
+import { serve, serveTls } from "https://deno.land/std@0.198.0/http/server.ts";
 import "https://deno.land/std/dotenv/load.ts";
 import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
 import logView from "./views/logger.js";
-import { DB, logger } from "./lib/index.ts";
+import { DB, get_kv, logger } from "./lib/index.ts";
 
 let resp;
 
@@ -30,7 +30,7 @@ const webLogs = async (req, res, info) => {
   const response = await res;
 
   const referer = request.headers.get("referer");
- 
+
   logger.info("request/response", {
     info: info,
     request: { method: request.method, uri: request.url, referer },
@@ -79,7 +79,8 @@ globalThis.oomph = {
   deploy,
   web,
   logger,
-  DB,
+  db: DB,
+  get_kv,
 };
 
 const initHost = (request) => {
@@ -107,14 +108,14 @@ const launch = async (entry_point) => {
       const { pathname } = new URL(req.url);
 
       const host = req.headers.get("host");
-      
+
       return new Response(null, {
         status: 301,
         headers: {
           Location: `https://${host.replace("www.", "")}${pathname}`,
         },
       });
-      },{ port: 80 });
+    }, { port: 80 });
   }
 
   serveTls((request, info) => {
@@ -125,7 +126,7 @@ const launch = async (entry_point) => {
       err.log();
       return new Response("Not Found", { status: 404 });
     }
-  },options);
+  }, options);
 };
 
 if (import.meta.main) {
@@ -135,7 +136,7 @@ if (import.meta.main) {
     try {
       serve(web);
     } catch {
-      serve(web,{ port: 9001 });
+      serve(web, { port: 9001 });
     }
   } else {
     launch(src);

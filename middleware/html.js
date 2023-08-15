@@ -16,17 +16,20 @@ const html_middleware = async (pathname, req) => {
     for (const ext of exts) {
       let _pageSrc = `${path}/index.${ext}`;
       paramPage = `${path}@.${ext}`;
+
+      const pathArrays = pathname.split("/");
+      pathArrays.shift();
+
+      console.log(pathArrays, pathArrays.length);
       if (
-        pathname.split("/").length === 2 && pathname !== "/" ||
-        pathname.includes("@")
+        pathArrays.length === 1 && pathArrays[0] !== "" ||
+        pathname.includes("@") && pathArrays.length !== 1
       ) {
         _pageSrc = `${path}${pathname}/pages/index.${ext}`;
-        paramPage = `${path}${pathname.split("/")[1]}/pages/@.${ext}`;
-      } else if (pathname !== "/") {
-        _pageSrc = `${path}${pathname.split("/")[1]}/pages/${
-          pathname.split("/")[2]
-        }.${ext}`;
-        paramPage = `${path}${pathname.split("/")[1]}/pages/@.${ext}`;
+        paramPage = `${path}${pathArrays[0]}/pages/@.${ext}`;
+      } else if (pathname !== "/" && pathArrays.length !== 1) {
+        _pageSrc = `${path}${pathArrays[0]}/pages/${pathArrays[1]}.${ext}`;
+        paramPage = `${path}${pathArrays[0]}/pages/@.${ext}`;
       }
       const isParamAvailible = await exists(paramPage);
       const pageExist = await exists(_pageSrc);

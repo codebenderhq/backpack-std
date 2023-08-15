@@ -3,6 +3,11 @@ import { create, insert, remove, search } from "npm:@orama/orama";
 import { persist, restore } from "npm:@orama/plugin-data-persistence";
 import logger from "./logger.ts";
 
+const get_kv = async () => {
+  const kv_path = window._cwd ? `${window._cwd}/db` : undefined;
+  return await Deno.openKv(kv_path);
+};
+
 class DB {
   schema = {};
   dbName;
@@ -14,7 +19,7 @@ class DB {
   }
 
   async search(term) {
-    const kv = await Deno.openKv();
+    const kv = await get_kv();
     const res = await kv.get(["orama", this.dbName]);
 
     if (!res.value) {
@@ -35,7 +40,7 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.kv = async function (func) {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
         this.dbName = this.constructor.name;
 
         return await func(kv);
@@ -46,10 +51,8 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.list = async function () {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
-        const prefix = window.global_identifier
-          ? [this.constructor.name, window.global_identifier]
-          : [this.constructor.name];
+        const kv = await get_kv();
+        const prefix = [this.constructor.name];
         const data = [];
 
         for await (const entry of kv.list({ prefix })) {
@@ -69,12 +72,10 @@ globalThis.onload = (e: Event): void => {
       try {
         logger.info("db/save", { message: "attempting to save", obj: this });
 
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
         const id = this.id || crypto.randomUUID();
         this.dbName = this.constructor.name;
-        const key = window.global_identifier
-          ? [this.dbName, window.global_identifier, id]
-          : [this.dbName, id];
+        const key = [this.dbName, id];
         const data = this.data;
 
         //    orama search init
@@ -105,11 +106,9 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.read = async function (id) {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
 
-        const key = window.global_identifier
-          ? [this.constructor.name, window.global_identifier, id]
-          : [this.dbName, id];
+        const key = [this.dbName, id];
         // Persist an object at the users/alice key.
         const res = await kv.get(key);
         logger.info("db/read", { value: res.value });
@@ -124,7 +123,7 @@ globalThis.onload = (e: Event): void => {
       try {
         logger.info("db/update", { message: "attempting to save", obj: this });
 
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
         this.dbName = this.constructor.name;
         const data = this.data;
 
@@ -168,11 +167,9 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.delete = async function (id) {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
 
-        const key = window.global_identifier
-          ? [this.dbName, window.global_identifier, id]
-          : [this.dbName, id];
+        const key = [this.dbName, id];
         const cacheRes = await kv.get(["orama", this.dbName]);
         const dataToDelete = await kv.get(key);
         const newInstance = await restore("json", cacheRes.value);
@@ -192,10 +189,8 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.delete_all = async function () {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
-        const prefix = window.global_identifier
-          ? [this.constructor.name, window.global_identifier]
-          : [this.constructor.name];
+        const kv = await get_kv();
+        const prefix = [this.constructor.name];
         const cacheRes = await kv.get(["orama", this.dbName]);
         const newInstance = await restore("json", cacheRes.value);
 
@@ -216,4 +211,4 @@ globalThis.onload = (e: Event): void => {
   }
 };
 
-export { DB };
+export { DB, get_kv };

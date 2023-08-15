@@ -29,3 +29,4 @@ it twisted
 - [ ] include verbose comments on code
 - [ ] open kv db at a (specific
       path)[https://deno.land/api@v1.36.1?s=Deno.openKv&unstable=]
+- [ ] upgrade to Deno.serve
