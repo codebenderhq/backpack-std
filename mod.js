@@ -43,8 +43,11 @@ const webLogs = async (req, res, info) => {
  * @return {Response} response
  */
 export const web = async (request, info) => {
-  const { pathname } = req(request);
-  window.extPath = window?._cwd ? window._cwd : Deno.cwd();
+  const { pathname, version } = req(request);
+
+  window.extPath = window?._cwd
+    ? (version ? `${window._cwd}/${version}` : window._cwd)
+    : Deno.cwd();
 
   try {
     await service(Object.values(extensions), pathname, request);
@@ -67,11 +70,16 @@ export const web = async (request, info) => {
 * @return {pathname: string}
 */
 export const req = (request) => {
-  const { pathname, hostname, username, search, searchParams } = new URL(
+  let { pathname, hostname, username, search, searchParams } = new URL(
     request.url,
   );
 
-  return { pathname, hostname, username, search, searchParams };
+  //  determine version requested from path
+  const versionParser = /\d{1,2}\.\d{1,3}\.\d{1,3}/g;
+  const version = pathname.match(versionParser)[0];
+  pathname = pathname.replace(versionParser, "").replaceAll("//", "/");
+
+  return { pathname, version, hostname, username, search, searchParams };
 };
 
 globalThis.oomph = {

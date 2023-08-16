@@ -6,7 +6,7 @@ let isError = false;
 let errorPath;
 
 const html_middleware = async (pathname, req) => {
-  let path = `${window._cwd ? window._cwd : "."}/src/_app/`;
+  let path = `${window.extPath}/src/_app/`;
   errorPath = `${path}/error/pages/index.html`;
 
   if (!pathname.includes(".")) {

@@ -9,7 +9,7 @@ const deploy = async (request) => {
     const version = searchParams.get("version");
     const appPath = `/deploy/${name}.tar.gz`;
     //  to be able to test locally will move this to env variables when stable
-//      const appPath = `./${name}.tar.gz`
+    //      const appPath = `./${name}.tar.gz`
     const f = await Deno.open(appPath, {
       create: true,
       write: true,
