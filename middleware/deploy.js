@@ -6,9 +6,10 @@ const deploy = async (request) => {
     console.time("saving file");
     const reader = await request?.body?.getReader();
     const name = searchParams.get("name");
+    const version = searchParams.get("version");
     const appPath = `/deploy/${name}.tar.gz`;
     //  to be able to test locally will move this to env variables when stable
-    //  const appPath = `./deploy/${name}.tar.gz`
+//      const appPath = `./${name}.tar.gz`
     const f = await Deno.open(appPath, {
       create: true,
       write: true,
@@ -21,7 +22,7 @@ const deploy = async (request) => {
       { type: "module" },
     );
 
-    deployWorker.postMessage({ path: appPath, name });
+    deployWorker.postMessage({ path: appPath, name, version });
 
     console.timeEnd("saving file");
     return new Response("deployed");
