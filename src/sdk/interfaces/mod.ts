@@ -4,22 +4,34 @@ import { oomph_db } from "./db.ts";
 /** The oomph SDK. */
 export declare namespace oomph {
   export interface database {}
+
+  /**
+   *  Web SDK to build apps easily
+   * ```js
+   * // index.js
+   *
+   * export default (props) => {}
+   *
+   * export onServerResult(path, req) => {}
+   * ```
+   *
+   * @category web
+   * @return {object} req
+   */
   export interface web {}
-  
+
   export interface logging {}
-  
+
   /**
    * Returns a decontructured request
-   *
    *
    * @category web
    * @return {object} req
    */
   export function req(): object;
-  
+
   /**
    * Logs to the logger db
-   *
    *
    * @category web
    * @return {void}
@@ -29,14 +41,16 @@ export declare namespace oomph {
   /**
    * Returns the implementation of oomph db
    *
-   * ```js
+   * ````
    * // initalize db
+   * ```js
    * const db = oomph.db('user')
    *
    * db.data = {
    * name: "Rawk Akani"
    * }
    * ```
+   * ````
    *
    * Requires `--unstable` permission.
    *

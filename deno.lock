@@ -100,7 +100,13 @@
     "https://deno.land/std@0.198.0/http/server.ts": "3cd5a8acc31d3259813ddcfa7dd2fe066952db6763fc7a58b9a026d4b5af9559",
     "https://deno.land/x/deno_doc@0.62.0/deno_doc.generated.js": "19e03c40e8f357e77f20ce9ba17728378b91333209eb7e964ba6128106c934ca",
     "https://deno.land/x/deno_doc@0.62.0/mod.ts": "f0a19c9a20d31955a207913466e13b19bfac1a2529f3bb7c7dafc0d0e0563a9f",
-    "https://deno.land/x/deno_graph@0.46.0/loader.ts": "a2e757383908f4a51659fe1b1203386887ebb17756bac930a64856d613d8d57d"
+    "https://deno.land/x/deno_graph@0.46.0/loader.ts": "a2e757383908f4a51659fe1b1203386887ebb17756bac930a64856d613d8d57d",
+    "https://esm.sh/@markdoc/markdoc@0.3.0": "03d1d74d9ed21de1d8b0a6025eaff0ea6d1263cdb6a8b9357874aefbee7b1f9e",
+    "https://esm.sh/react-dom@18.2.0/server": "ea9d1990dc787a7fcafdbd981923840eca1b27983ae8a082a312ede5b3ee9f49",
+    "https://esm.sh/react@18.2.0": "742d8246041966ba1137ec8c60888c35882a9d2478bce63583875f86c1e3687c",
+    "https://esm.sh/stable/react@18.2.0/deno/react.mjs": "a5a73ee24acca4744ee22c51d9357f31968d1f684ce253bde222b4e26d09f49f",
+    "https://esm.sh/v124/react-dom@18.2.0/deno/server.js": "687d1b8ca3a73bdf42750098db291810fcb4b21c1b8761c66cc94ac9334e71a8",
+    "https://esm.sh/v129/@markdoc/markdoc@0.3.0/denonext/markdoc.mjs": "439ad1a98997133f3ebea58040124bc0ef2c35cc8830ddbe4e25a923b21ec3e0"
   },
   "npm": {
     "specifiers": {
