@@ -1,13 +1,30 @@
 //https://docs.oramasearch.com/
-import { create, insert, remove, search } from "npm:@orama/orama";
-import { persist, restore } from "npm:@orama/plugin-data-persistence";
 import logger from "./logger.ts";
+import { create, insert, persist, remove, restore, search } from "./deps.js";
+//import { persist, restore } from "npm:@orama/plugin-data-persistence";
 
 const get_kv = async () => {
   const kv_path = window._cwd ? `${window._cwd}/db` : undefined;
   return await Deno.openKv(kv_path);
 };
 
+/**
+ * BuiltIn DB
+ *
+ * ```js
+ * // initalize db
+ * const db = oomph.db('user')
+ *
+ * db.data = {
+ * name: "Rawk Akani"
+ * }
+ * ```
+ * @category database
+ *
+ * @param {string} name table name
+ *
+ * @return {OomphDB} oomphdb
+ */
 const db = (name: string) => {
   class OomphDB extends DB {}
 

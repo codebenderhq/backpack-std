@@ -1,13 +1,11 @@
 import { serve, serveTls } from "https://deno.land/std@0.198.0/http/server.ts";
 import "https://deno.land/std/dotenv/load.ts";
-import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
 import logView from "./views/logger.js";
-import { db, get_kv, logger } from "./lib/index.ts";
+import oomph from "./deps.js";
 
 let resp;
-
 const service = async (ext, pathname, req) => {
   resp = null;
   if (pathname === "/logs" && req.method === "GET") {
@@ -31,7 +29,7 @@ const webLogs = async (req, res, info) => {
 
   const referer = request.headers.get("referer");
 
-  logger.info("request/response", {
+  oomph.logger.info("request/response", {
     info: info,
     request: { method: request.method, uri: request.url, referer },
     response: { status: response.status },
@@ -85,14 +83,9 @@ export const req = (request) => {
   return { pathname, version, hostname, username, search, searchParams };
 };
 
-globalThis.oomph = {
-  req,
-  deploy,
-  web,
-  logger,
-  db,
-  get_kv,
-};
+oomph.req = req;
+oomph.web = web;
+globalThis.oomph = oomph;
 
 const initHost = (request) => {
   globalThis.oomph.user_request = req(request);
@@ -141,14 +134,11 @@ const launch = async (entry_point) => {
 };
 
 if (import.meta.main) {
-  const [src] = Deno.args;
+  const [src, port] = Deno.args;
 
   if (src === "--web") {
-    try {
-      await serve(web);
-    } catch {
-      serve(web, { port: 9002 });
-    }
+    const _port = port ? port : 8000;
+    await serve(web, { port: _port });
   } else {
     launch(src);
   }
