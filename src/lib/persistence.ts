@@ -8,7 +8,6 @@ const get_kv = async () => {
   return await Deno.openKv(kv_path);
 };
 
-
 const db = (name: string) => {
   class OomphDB extends DB {}
 
@@ -16,8 +15,8 @@ const db = (name: string) => {
 
   oomphDB.dbName = name;
 
-  return oomphDB
-}
+  return oomphDB;
+};
 
 class DB {
   schema = {};
@@ -73,7 +72,7 @@ globalThis.onload = (e: Event): void => {
       try {
         logger.info("db/save", { message: "attempting to save", obj: this });
 
-        const kv =  await get_kv()
+        const kv = await get_kv();
         const id = this.id || crypto.randomUUID();
         const key = [this.dbName, id];
         const data = this.data;
@@ -210,4 +209,4 @@ globalThis.onload = (e: Event): void => {
   }
 };
 
-export { get_kv, db };
+export { db, get_kv };

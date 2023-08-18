@@ -1,4 +1,4 @@
-import {get_kv, db } from "./persistence.ts";
+import { db, get_kv } from "./persistence.ts";
 import "./error.ts";
 import logger from "./logger.ts";
 

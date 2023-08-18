@@ -77,7 +77,9 @@ export const req = (request) => {
   //  determine version requested from path
   const versionParser = /\d{1,2}\.\d{1,3}\.\d{1,3}/g;
 
-  const version = pathname.match(versionParser) ? pathname.match(versionParser)[0] : undefined;
+  const version = pathname.match(versionParser)
+    ? pathname.match(versionParser)[0]
+    : undefined;
   pathname = pathname.replace(versionParser, "").replaceAll("//", "/");
 
   return { pathname, version, hostname, username, search, searchParams };
@@ -145,7 +147,6 @@ if (import.meta.main) {
     try {
       await serve(web);
     } catch {
-
       serve(web, { port: 9002 });
     }
   } else {
