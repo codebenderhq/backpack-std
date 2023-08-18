@@ -4,7 +4,7 @@ import deploy from "./middleware/deploy.js";
 import * as extensions from "./middleware/index.js";
 import "./lib/index.ts";
 import logView from "./views/logger.js";
-import { DB, get_kv, logger } from "./lib/index.ts";
+import { db, get_kv, logger } from "./lib/index.ts";
 
 let resp;
 
@@ -76,7 +76,8 @@ export const req = (request) => {
 
   //  determine version requested from path
   const versionParser = /\d{1,2}\.\d{1,3}\.\d{1,3}/g;
-  const version = pathname.match(versionParser)[0];
+
+  const version = pathname.match(versionParser) ? pathname.match(versionParser)[0] : undefined;
   pathname = pathname.replace(versionParser, "").replaceAll("//", "/");
 
   return { pathname, version, hostname, username, search, searchParams };
@@ -87,7 +88,7 @@ globalThis.oomph = {
   deploy,
   web,
   logger,
-  db: DB,
+  db,
   get_kv,
 };
 
@@ -142,9 +143,10 @@ if (import.meta.main) {
 
   if (src === "--web") {
     try {
-      serve(web);
+      await serve(web);
     } catch {
-      serve(web, { port: 9001 });
+
+      serve(web, { port: 9002 });
     }
   } else {
     launch(src);

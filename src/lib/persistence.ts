@@ -8,6 +8,17 @@ const get_kv = async () => {
   return await Deno.openKv(kv_path);
 };
 
+
+const db = (name: string) => {
+  class OomphDB extends DB {}
+
+  const oomphDB = new OomphDB();
+
+  oomphDB.dbName = name;
+
+  return oomphDB
+}
+
 class DB {
   schema = {};
   dbName;
@@ -37,22 +48,12 @@ class DB {
 //https://deno.com/manual@v1.34.0/runtime/kv
 globalThis.onload = (e: Event): void => {
   if (Object.isExtensible(Object.prototype)) {
-    DB.prototype.kv = async function (func) {
-      try {
-        // Open the default database for the script.
-        const kv = await get_kv();
-        this.dbName = this.constructor.name;
-
-        return await func(kv);
-      } catch (e) {
-        console.log("initaite error", e.message);
-      }
-    };
+    DB.prototype.kv = get_kv;
     DB.prototype.list = async function () {
       try {
         // Open the default database for the script.
         const kv = await get_kv();
-        const prefix = [this.constructor.name];
+        const prefix = [this.dbName];
         const data = [];
 
         for await (const entry of kv.list({ prefix })) {
@@ -72,9 +73,8 @@ globalThis.onload = (e: Event): void => {
       try {
         logger.info("db/save", { message: "attempting to save", obj: this });
 
-        const kv = await get_kv();
+        const kv =  await get_kv()
         const id = this.id || crypto.randomUUID();
-        this.dbName = this.constructor.name;
         const key = [this.dbName, id];
         const data = this.data;
 
@@ -124,7 +124,6 @@ globalThis.onload = (e: Event): void => {
         logger.info("db/update", { message: "attempting to save", obj: this });
 
         const kv = await get_kv();
-        this.dbName = this.constructor.name;
         const data = this.data;
 
         const currentRes = await kv.get(key);
@@ -190,7 +189,7 @@ globalThis.onload = (e: Event): void => {
       try {
         // Open the default database for the script.
         const kv = await get_kv();
-        const prefix = [this.constructor.name];
+        const prefix = [this.dbName];
         const cacheRes = await kv.get(["orama", this.dbName]);
         const newInstance = await restore("json", cacheRes.value);
 
@@ -211,4 +210,4 @@ globalThis.onload = (e: Event): void => {
   }
 };
 
-export { DB, get_kv };
+export { get_kv, db };
