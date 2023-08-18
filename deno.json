@@ -1,5 +1,0 @@
-{
-    "tasks": {
-        "release": "deno fmt && ../deploy/deploy cloud ./src https://sauveur.cloud/deploy"
-    }
-}
