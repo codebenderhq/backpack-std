@@ -7,7 +7,7 @@ let errorPath;
 
 const html_middleware = async (pathname, req) => {
   let path = `${window.extPath}/src/_app/`;
-  errorPath = `${path}/error/pages/index.html`;
+  errorPath = `${path}error/pages/index.html`;
 
   if (!pathname.includes(".")) {
     let paramPage = "";
@@ -33,6 +33,7 @@ const html_middleware = async (pathname, req) => {
       }
       const isParamAvailible = await exists(paramPage);
       const pageExist = await exists(_pageSrc);
+
       if (!page && (pageExist || isParamAvailible) && ext !== "jsx") {
         page = await Deno.readTextFile(
           pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error(),
@@ -40,17 +41,20 @@ const html_middleware = async (pathname, req) => {
         if (pageExist || isParamAvailible) {
           break;
         }
+      } else if (!pageExist || !isParamAvailible) {
+        page = await Deno.readTextFile(errorPath);
       }
-      if (ext === "jsx" && isError && pageExist || isParamAvailible) {
+
+      if (ext === "jsx" && pageExist || isParamAvailible) {
         jsxPage = await import(
-          `../../../${
-            pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error()
-          }`
+          pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error()
         );
       }
     }
     if (jsxPage) {
-      return jsxPage.default();
+      return new Response(await jsxPage.default(req), {
+        headers: { "content-type": "text/html" },
+      });
     }
     return html_response(page);
   }

@@ -138,7 +138,7 @@ if (import.meta.main) {
 
   if (src === "--web") {
     const _port = port ? port : 8000;
-    await serve(web, { port: _port });
+    serve(web, { port: _port });
   } else {
     launch(src);
   }
