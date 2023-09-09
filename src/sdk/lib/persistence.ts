@@ -4,7 +4,10 @@ import { create, insert, persist, remove, restore, search } from "./deps.js";
 //import { persist, restore } from "npm:@orama/plugin-data-persistence";
 
 const get_kv = async () => {
-  const kv_path = window._cwd ? `${window._cwd}/db` : undefined;
+  const db_path = window.isQARequest ? "qa-db" : "db";
+
+  const kv_path = window._cwd ? `${window._cwd}/${db_path}` : undefined;
+  console.log(kv_path);
   return await Deno.openKv(kv_path);
 };
 

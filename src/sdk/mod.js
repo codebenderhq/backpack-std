@@ -80,7 +80,14 @@ export const req = (request) => {
     : undefined;
   pathname = pathname.replace(versionParser, "").replaceAll("//", "/");
 
-  return { pathname, version, hostname, username, search, searchParams };
+  return {
+    pathname,
+    version,
+    hostname,
+    username,
+    search,
+    searchParams,
+  };
 };
 
 oomph.req = req;
