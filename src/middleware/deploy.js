@@ -1,4 +1,17 @@
 import { readerFromStreamReader } from "https://deno.land/std/streams/mod.ts";
+
+/**
+ * BuiltIn deploy functionality
+ *
+ * ```js
+ * oomph.deploy(request)
+ * ```
+ * @category deploy
+ *
+ * @param {request} http request
+ *
+ * @return {Response} reponse
+ */
 const deploy = async (request) => {
   const { pathname, searchParams } = oomph.req(request);
 

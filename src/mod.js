@@ -46,7 +46,6 @@ export const web = async (request, info) => {
   window.extPath = window?._cwd
     ? (version ? `${window._cwd}/${version}` : window._cwd)
     : Deno.cwd();
-
   try {
     await service(Object.values(extensions), pathname, request);
     resp = resp ? resp : new Response("Not Found", { status: "404" });

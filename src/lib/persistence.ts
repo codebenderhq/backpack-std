@@ -3,6 +3,15 @@ import logger from "./logger.ts";
 import { create, insert, persist, remove, restore, search } from "./deps.js";
 //import { persist, restore } from "npm:@orama/plugin-data-persistence";
 
+/**
+ * A number, or a string containing a number.
+ * @typedef {(number|string)} NumberLike
+ */
+
+/**
+ * Set the magic number.
+ * @param {NumberLike} x - The magic number.
+ */
 const get_kv = async () => {
   const db_path = window.isQARequest ? "qa-db" : "db";
 
