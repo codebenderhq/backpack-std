@@ -5,6 +5,7 @@ self.onmessage = async (evt) => {
   const path = evt.data.path;
   const name = evt.data.name;
   const version = evt.data.version;
+  const clean = evt.data.clean;
 
   // if there is a version, move the old app into it's version folder/rename, delete the current src and unzip
   // /appName/src
@@ -13,6 +14,11 @@ self.onmessage = async (evt) => {
   if (version) {
     await Deno.mkdir(`/apps/${name}/${version}`);
     await Deno.rename(`/apps/${name}/src`, `/apps/${name}/${version}/src`);
+  }
+
+  if(clean) {
+    //  clean up old files
+    await Deno.remove(`/apps/${name}`, { recursive: true });
   }
 
   await tgz.uncompress(path, `/apps/${name}`, { overwrite: true });
