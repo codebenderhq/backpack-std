@@ -53,8 +53,12 @@ export const web = async (request, info) => {
     return resp;
   } catch (err) {
     err.log();
-    return Response.json({ msg: "Error:LEVEL1", err: err.message }, {
-      status: 500,
+    //    err.message
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: "https://sauveur.cloud/error",
+      },
     });
   }
 };

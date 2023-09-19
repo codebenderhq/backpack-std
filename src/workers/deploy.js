@@ -16,7 +16,7 @@ self.onmessage = async (evt) => {
     await Deno.rename(`/apps/${name}/src`, `/apps/${name}/${version}/src`);
   }
 
-  if(clean) {
+  if (clean) {
     //  clean up old files
     await Deno.remove(`/apps/${name}`, { recursive: true });
   }
