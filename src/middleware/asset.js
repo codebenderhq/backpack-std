@@ -8,9 +8,10 @@ import { transform } from "npm:lightningcss";
 
 const asset_middlware = async (pathname, request) => {
   const isFileRequest = pathname.includes(".");
+  const isServiceWorker = pathname.includes("sw.js");
   // figure out the issue
   const isJsFIle = pathname.includes(".js");
-  if (isFileRequest && !isJsFIle) {
+  if (isFileRequest && !isJsFIle || isServiceWorker) {
     try {
       const type = pathname.split(".").pop();
       const content_type = `text/${type}`;
@@ -46,6 +47,7 @@ const asset_middlware = async (pathname, request) => {
       }
     } catch (err) {
       err.log();
+      throw new Error("File Does Not Exist");
     }
   }
 };

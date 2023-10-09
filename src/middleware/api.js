@@ -51,8 +51,8 @@ const get_data = async (request) => {
 const api_middleware = async (pathname, request) => {
   const isFormType =
     request.headers.get("content-type") === "application/x-www-form-urlencoded";
-  const isApiCall = pathname.includes("api") ||
-    request.headers.get("host").includes("api");
+  const isApiCall = pathname?.includes("api") ||
+    request.headers.get("host")?.includes("api");
   if (isApiCall || isFormType) {
     let response;
     try {
@@ -76,6 +76,7 @@ const api_middleware = async (pathname, request) => {
 
       if (request.method !== "GET") {
         data = await get_data(request);
+        oomph.logger.info({ ...data });
       }
 
       const { default: apiMethod } = await import(
@@ -97,11 +98,11 @@ const api_middleware = async (pathname, request) => {
 
         // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
 
-        const Location = `${protocol}//${redirectHost ? redirectHost : host}${
+        const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
           returnPath ? returnPath : "/status"
         }?${searchParam.toString()}`;
 
-        console.log(Location);
+        console.log("redirect to", Location);
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
         // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
         const headers = {
@@ -125,14 +126,12 @@ const api_middleware = async (pathname, request) => {
         status,
       });
     } catch (err) {
-      // log();
       console.log(err);
-      const _err = {
+      oomph.logger.info({
         title: `SERVER:API:ERROR:${request.url}`,
         msg: err.message,
         err,
-      };
-      window.dispatchLog({ ..._err });
+      });
       throw new Error(`SERVER:API:ERROR:${request.url}`);
     }
 

@@ -6,8 +6,8 @@ let isError = false;
 let errorPath;
 
 const html_middleware = async (pathname, req) => {
-  let path = `${window._cwd ? window._cwd : "."}/src/_app/`;
-  errorPath = `${path}/error/pages/index.html`;
+  let path = `${window.extPath}/src/_app/`;
+  errorPath = `${path}error/pages/index.html`;
 
   if (!pathname.includes(".")) {
     let paramPage = "";
@@ -16,19 +16,24 @@ const html_middleware = async (pathname, req) => {
     for (const ext of exts) {
       let _pageSrc = `${path}/index.${ext}`;
       paramPage = `${path}@.${ext}`;
+
+      const pathArrays = pathname.split("/");
+      pathArrays.shift();
+
       if (
-        pathname.split("/").length === 2 && pathname !== "/" ||
-        pathname.includes("@")
+        pathArrays.length === 1 && pathArrays[0] !== "" &&
+          !pathname.includes("@") ||
+        pathname.includes("@") && pathArrays.length !== 1
       ) {
         _pageSrc = `${path}${pathname}/pages/index.${ext}`;
-      } else if (pathname !== "/") {
-        _pageSrc = `${path}${pathname.split("/")[1]}/pages/${
-          pathname.split("/")[2]
-        }.${ext}`;
-        paramPage = `${path}${pathname.split("/")[1]}/pages/@.${ext}`;
+        paramPage = `${path}${pathArrays[0]}/pages/@.${ext}`;
+      } else if (pathname !== "/" && pathArrays.length !== 1) {
+        _pageSrc = `${path}${pathArrays[0]}/pages/${pathArrays[1]}.${ext}`;
+        paramPage = `${path}${pathArrays[0]}/pages/@.${ext}`;
       }
       const isParamAvailible = await exists(paramPage);
       const pageExist = await exists(_pageSrc);
+
       if (!page && (pageExist || isParamAvailible) && ext !== "jsx") {
         page = await Deno.readTextFile(
           pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error(),
@@ -36,17 +41,20 @@ const html_middleware = async (pathname, req) => {
         if (pageExist || isParamAvailible) {
           break;
         }
+      } else if (!pageExist || !isParamAvailible) {
+        page = await Deno.readTextFile(errorPath);
       }
-      if (ext === "jsx" && isError && pageExist || isParamAvailible) {
+
+      if (ext === "jsx" && pageExist || isParamAvailible) {
         jsxPage = await import(
-          `../../../${
-            pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error()
-          }`
+          pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error()
         );
       }
     }
     if (jsxPage) {
-      return jsxPage.default();
+      return new Response(await jsxPage.default(req), {
+        headers: { "content-type": "text/html" },
+      });
     }
     return html_response(page);
   }

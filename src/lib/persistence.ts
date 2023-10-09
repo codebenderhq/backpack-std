@@ -1,55 +1,87 @@
 //https://docs.oramasearch.com/
-import { create, insert, remove, search } from "npm:@orama/orama";
-import { persist, restore } from "npm:@orama/plugin-data-persistence";
 import logger from "./logger.ts";
+import { create, insert, persist, remove, restore, search } from "./deps.js";
+//import { persist, restore } from "npm:@orama/plugin-data-persistence";
 
+/**
+ * A number, or a string containing a number.
+ * @typedef {(number|string)} NumberLike
+ */
+
+/**
+ * Set the magic number.
+ * @param {NumberLike} x - The magic number.
+ */
+const get_kv = async () => {
+  const db_path = window.isQARequest ? "qa-db" : "db";
+
+  const kv_path = window._cwd ? `${window._cwd}/${db_path}` : undefined;
+  console.log(kv_path);
+  return await Deno.openKv(kv_path);
+};
+
+/**
+ * BuiltIn DB
+ *
+ * ```js
+ * // initalize db
+ * const db = oomph.db('user')
+ *
+ * db.data = {
+ * name: "Rawk Akani"
+ * }
+ * ```
+ * @category database
+ *
+ * @param {string} name table name
+ *
+ * @return {OomphDB} oomphdb
+ */
+const db = (name: string) => {
+  class OomphDB extends DB {}
+
+  const oomphDB = new OomphDB();
+
+  oomphDB.dbName = name;
+
+  return oomphDB;
+};
+
+class DB {
+  schema = {};
+  dbName;
+  oramaDB;
+  //  for now search everything
+
+  constructor() {
+    this.dbName = this.constructor.name;
+  }
+
+  async search(term) {
+    const kv = await get_kv();
+    const res = await kv.get(["orama", this.dbName]);
+
+    if (!res.value) {
+      return [];
+    }
+
+    const newInstance = await restore("json", res.value);
+    kv.close();
+    return await search(newInstance, {
+      term: term,
+      properties: "*",
+    });
+  }
+}
 //https://deno.com/manual@v1.34.0/runtime/kv
 globalThis.onload = (e: Event): void => {
   if (Object.isExtensible(Object.prototype)) {
-    class DB {
-      schema = {};
-      dbName;
-      oramaDB;
-      //  for now search everything
-
-      constructor() {
-        this.dbName = this.constructor.name;
-      }
-
-      async search(term) {
-        const kv = await Deno.openKv();
-        const res = await kv.get(["orama", this.dbName]);
-
-        if (!res.value) {
-          return [];
-        }
-
-        const newInstance = await restore("json", res.value);
-        kv.close()
-        return await search(newInstance, {
-          term: term,
-          properties: "*",
-        });
-      }
-    }
-
-    DB.prototype.kv = async function (func) {
-      try {
-        // Open the default database for the script.
-        const kv = await Deno.openKv();
-        this.dbName = this.constructor.name
-
-        return await func(kv)
-      } catch (e) {
-        console.log("initaite error", e.message);
-      }
-    };
+    DB.prototype.kv = get_kv;
     DB.prototype.list = async function () {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
-
-        const prefix = [this.constructor.name];
+        const kv = await get_kv();
+        const prefix = [this.dbName];
         const data = [];
 
         for await (const entry of kv.list({ prefix })) {
@@ -58,7 +90,7 @@ globalThis.onload = (e: Event): void => {
           );
         }
 
-        kv.close()
+        kv.close();
         return data;
       } catch (e) {
         console.log("initaite error", e.message);
@@ -67,11 +99,10 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.save = async function () {
       // Open the default database for the script.
       try {
-        logger("attempting to save", this);
+        logger.info("db/save", { message: "attempting to save", obj: this });
 
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
         const id = this.id || crypto.randomUUID();
-        this.dbName = this.constructor.name;
         const key = [this.dbName, id];
         const data = this.data;
 
@@ -92,9 +123,9 @@ globalThis.onload = (e: Event): void => {
         await kv.set(["orama", this.dbName], JSONIndex);
 
         data.cacheId = cacheId;
-        logger(key, data);
+        logger.info("db/save", { key, data });
         await kv.set(key, data);
-        kv.close()
+        kv.close();
         return id;
       } catch (e) {
         e.log("issue saving", e.message);
@@ -103,14 +134,13 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.read = async function (id) {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
 
-        const key = [this.constructor.name, id];
+        const key = [this.dbName, id];
         // Persist an object at the users/alice key.
         const res = await kv.get(key);
-        logger("key", res.key);
-        logger("value", res.value);
-        kv.close()
+        logger.info("db/read", { value: res.value });
+        kv.close();
         return res;
       } catch (e) {
         e.log("initaite error", e);
@@ -119,10 +149,9 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.update = async function (key) {
       // Open the default database for the script.
       try {
-        logger("attempting to save", this);
+        logger.info("db/update", { message: "attempting to save", obj: this });
 
-        const kv = await Deno.openKv();
-        this.dbName = this.constructor.name;
+        const kv = await get_kv();
         const data = this.data;
 
         const currentRes = await kv.get(key);
@@ -145,12 +174,18 @@ globalThis.onload = (e: Event): void => {
 
         const updatedData = {
           ...currentRes.value,
-          ...data
-        }
+          ...data,
+        };
         updatedData.cacheId = cacheId;
-        logger(`about to save to ${key}`, updatedData);
-        const commitRes = await kv.atomic().check(currentRes).set(key, updatedData).commit()
-        kv.close()
+        logger.info("db/update", {
+          message: "about to save ",
+          obj: updatedData,
+        });
+        const commitRes = await kv.atomic().check(currentRes).set(
+          key,
+          updatedData,
+        ).commit();
+        kv.close();
         return commitRes;
       } catch (e) {
         e.log("issue saving", e.message);
@@ -159,7 +194,7 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.delete = async function (id) {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
+        const kv = await get_kv();
 
         const key = [this.dbName, id];
         const cacheRes = await kv.get(["orama", this.dbName]);
@@ -171,8 +206,8 @@ globalThis.onload = (e: Event): void => {
 
         // Persist an object at the users/alice key.
         const res = await kv.delete(key);
-        logger("deleted data of:", key);
-        kv.close()
+        logger.info("db/delete", { message: "deleted data of:", obj: key });
+        kv.close();
         return res;
       } catch (e) {
         e.log("initaite error", e);
@@ -181,9 +216,8 @@ globalThis.onload = (e: Event): void => {
     DB.prototype.delete_all = async function () {
       try {
         // Open the default database for the script.
-        const kv = await Deno.openKv();
-
-        const prefix = [this.constructor.name];
+        const kv = await get_kv();
+        const prefix = [this.dbName];
         const cacheRes = await kv.get(["orama", this.dbName]);
         const newInstance = await restore("json", cacheRes.value);
 
@@ -195,12 +229,13 @@ globalThis.onload = (e: Event): void => {
         const JSONIndex = await persist(newInstance, "json");
         await kv.set(["orama", this.dbName], JSONIndex);
 
-        kv.close()
+        kv.close();
         return true;
       } catch (e) {
         console.log("initaite error", e.message);
       }
     };
-    globalThis.DB = DB;
   }
 };
+
+export { db, get_kv };
