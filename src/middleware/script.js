@@ -6,8 +6,8 @@ const script_middleware = async (pathname, req) => {
     let onServerResult;
     let prop;
 
-    let res = await import(`app/${window.extPath}/src/_app${_pathname}.js`);
-
+    let res = await import(`${Deno.env.get('env') ? './': "app"}/${window.extPath}/src/_app${_pathname}.js`);
+    
     // this will only work locally and should only be deployed to a linux enviroment
     if(Deno.build.os === "windows"){
       res = await import(`file:///${window.extPath}/src/_app${_pathname}.js`)
