@@ -52,14 +52,16 @@ export const web = async (request, info) => {
     webLogs(request, resp, info);
     return resp;
   } catch (err) {
-    err.log();
-    //    err.message
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: "https://sauveur.cloud/error",
-      },
-    });
+
+    console.log(err)
+//    err.log();
+//    //    err.message
+//    return new Response(null, {
+//      status: 302,
+//      headers: {
+//        Location: "https://sauveur.cloud/error",
+//      },
+//    });
   }
 };
 
