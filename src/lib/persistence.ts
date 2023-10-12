@@ -107,27 +107,28 @@ globalThis.onload = (e: Event): void => {
         const data = this.data;
 
         //    orama search init
-        const res = await kv.get(["orama", this.dbName]);
-        if (res.value) {
-          this.oramaDB = await restore("json", res.value);
-        } else {
-          for (const [key, value] of Object.entries(data)) {
-            this.schema[key] = typeof value;
-          }
+        //        const res = await kv.get(["orama", this.dbName]);
+        //        if (res.value) {
+        //          this.oramaDB = await restore("json", res.value);
+        //        } else {
+        //          for (const [key, value] of Object.entries(data)) {
+        //            this.schema[key] = typeof value;
+        //          }
+        //
+        //          this.oramaDB = await create({ schema: this.schema });
+        //        }
+        //
+        //        const cacheId = await insert(this.oramaDB, data);
+        //        const JSONIndex = await persist(this.oramaDB, "json");
+        //        await kv.set(["orama", this.dbName], JSONIndex);
 
-          this.oramaDB = await create({ schema: this.schema });
-        }
-
-        const cacheId = await insert(this.oramaDB, data);
-        const JSONIndex = await persist(this.oramaDB, "json");
-        await kv.set(["orama", this.dbName], JSONIndex);
-
-        data.cacheId = cacheId;
+        //        data.cacheId = cacheId;
         logger.info("db/save", { key, data });
         await kv.set(key, data);
         kv.close();
         return id;
       } catch (e) {
+        console.log(e);
         e.log("issue saving", e.message);
       }
     };

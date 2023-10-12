@@ -15,7 +15,11 @@ const logView = async (request) => {
 
     let logView = "";
     logs.forEach((log) => {
-      logView += `${log.value.type} \n ${JSON.stringify(log.value.data)} \n`;
+      try {
+        logView += `${log.value.type} \n ${JSON.stringify(log.value.data)} \n`;
+      } catch (e) {
+        console.log(e, log.value.data);
+      }
     });
 
     return new Response(logView);
