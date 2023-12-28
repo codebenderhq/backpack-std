@@ -11,7 +11,12 @@ const script_middleware = async (pathname, req) => {
     
     // this is to support deployment to a linux enviroment
     if(!Deno.build.os === "windows"|| !Deno.env.get('env') ){
-      res = await import(`app/${window.extPath}/src/_app${_pathname}.js`);
+      if(Deno.env.get('env') === 'dev'){
+        res = await import(`${window.extPath}/src/_app${_pathname}.js`);
+      }else{
+        res = await import(`app/${window.extPath}/src/_app${_pathname}.js`);
+      }
+
     }
 
     if (res.onServer) {
