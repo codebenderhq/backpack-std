@@ -79,9 +79,14 @@ const api_middleware = async (pathname, request) => {
         oomph.logger.info({ ...data });
       }
 
-      const { default: apiMethod } = await import(
-        `app/${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`
-      );
+      let api_path = `${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`
+
+      // this is to be able to handle the production enviroment 
+      if(Deno.env.get('env') !== "dev"){
+        api_path = `app/${api_path}`
+      }
+
+      const { default: apiMethod } = await import(api_path);
       const json = await apiMethod(request, data.result);
 
       const status = json.status;
