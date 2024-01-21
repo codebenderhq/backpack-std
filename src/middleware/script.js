@@ -1,36 +1,32 @@
-const script_middleware = async (pathname, req) => {
-  const isScriptRequest = pathname.includes(".js");
-  const _pathname = pathname.split(".").shift();
+const script_middleware = async (req, isProd) => {
+  const {pathname: _pathname} = new URL(req.url)
+  console.log(_pathname)
+  let onServerResult;
+  let prop;
 
-  if (isScriptRequest) {
-    let onServerResult;
-    let prop;
+  console.log(window._cwd)
+  let res = await import(`file:///${window._cwd}${_pathname}`)
 
-
-    let res = await import(`file:///${window.extPath}/src/_app${_pathname}.js`)
-    
-    // this is to support deployment to a linux enviroment
-    if(!Deno.build.os === "windows"|| !Deno.env.get('env') ){
-      if(Deno.env.get('env') === 'dev'){
-        res = await import(`${window.extPath}/src/_app${_pathname}.js`);
-      }else{
-        res = await import(`app/${window.extPath}/src/_app${_pathname}.js`);
-      }
-
+  // this is to support deployment to a linux enviroment
+  if(!Deno.build.os === "windows"|| !isProd ){
+    if(!isProd){
+      res = await import(`${window._cwd}${_pathname}`);
+    }else{
+      res = await import(`app/${window._cwd}${_pathname}`);
     }
-
-    if (res.onServer) {
-      onServerResult = await res.onServer(_pathname, req);
-    }
-
-    prop = { onServerResult };
-
-    return new Response(`(${res.default})(${JSON.stringify(prop)})`, {
-      headers: {
-        "content-type": "text/javascript",
-      },
-    });
   }
+
+  if (res.onServer) {
+    onServerResult = await res.onServer(_pathname, req);
+  }
+
+  prop = { onServerResult };
+
+  return new Response(`(${res.default})(${JSON.stringify(prop)})`, {
+    headers: {
+      "content-type": "text/javascript",
+    },
+  });
 };
 
 export default script_middleware;
