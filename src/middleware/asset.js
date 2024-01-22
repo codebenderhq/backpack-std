@@ -9,15 +9,12 @@ import { transform } from "npm:lightningcss";
 
 const asset_middlware = async (request, type) => {
   const {pathname} = new URL(request.url)
-//  const isFileRequest = pathname.includes(".");
 //  const isServiceWorker = pathname.includes("sw.js");
   try {
     const content_type = `text/${type}`;
     const file_path = `${window._app}/src/public${pathname}`;
 
     // find out if there is a leak here
-    // const file = await Deno.open(file_path, { read: true });
-    // const content = await file.readable;
     if (type === "style") {
       //TODO: when a change is made here testing using the native object protoype for persistence shoudl be tried again
 
@@ -47,7 +44,6 @@ const asset_middlware = async (request, type) => {
       return await serveFile(request, file_path);
     }
   } catch (err) {
-    console.log(err)
     err.log();
     throw new Error("File Does Not Exist");
   }

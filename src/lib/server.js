@@ -76,13 +76,3 @@ export const serve = async (isProd, appName) => {
   });
 };
 
-
-
-async function main(inputArgs){
-  console.log(inputArgs)
-  serve()
-}
-
-
-main(Deno.args);
-

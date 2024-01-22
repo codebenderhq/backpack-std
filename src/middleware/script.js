@@ -4,7 +4,6 @@ const script_middleware = async (req, isProd) => {
   let onServerResult;
   let prop;
 
-  console.log(window._cwd)
   let res = await import(`file:///${window._cwd}${_pathname}`)
 
   // this is to support deployment to a linux enviroment
