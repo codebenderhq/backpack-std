@@ -25,8 +25,9 @@ const html_middleware = async (req) => {
 
   const components = getComponents(src)
 
-  if(components.length > 0){
-    src = await compileDoc(src,components)
+  console.log(paths)
+  if(components && components.length > 0){
+    src = await compileDoc(src,components, paths)
   }
 
   return html_response(src)

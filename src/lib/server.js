@@ -11,21 +11,6 @@ export const serve = async (isProd, appName) => {
   console.log(isProd ? "Production Server Running" : "Dev Server Running");
 
   if(isProd){
-
-    //  acme service
-    Deno.serve((req) => {
-      const { pathname } = new URL(req.url);
-
-      const host = req.headers.get("host");
-
-      return new Response(null, {
-        status: 301,
-        headers: {
-          Location: `https://${host.replace("www.", "")}${pathname}`,
-        },
-      });
-      }, { port: 80 });
-
     //  acme service
     Deno.serve((req) => {
       const { pathname } = new URL(req.url);
