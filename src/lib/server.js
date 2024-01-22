@@ -49,6 +49,7 @@ export const serve = async (isProd, appName) => {
         return script_middleware(req);
       case "style":
       case "image":
+      case "manifest":
         return asset_middlware(req, type);
       case "application/x-www-form-urlencoded":
       case "application/json":

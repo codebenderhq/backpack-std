@@ -47,10 +47,9 @@ export const compileDoc = async (html, elements, path) => {
                                 })
                         }
 
-                        new_doc = new_doc.replace(element,element_src.default(atrributes))
+                        new_doc = new_doc.replace(element,await element_src.default(atrributes))
                 }
 
         }))
-
     return new_doc
 }
