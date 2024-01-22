@@ -22,7 +22,7 @@ const html_middleware = async (req) => {
     tempSrc = `${window._cwd}/index.html`;
   }
 
-  src = await exists(tempSrc) ? await Deno.readTextFile(tempSrc) : `<h1>Error</h1>`;
+  src = await exists(tempSrc) ? await Deno.readTextFile(tempSrc) : `<h1>Error In Page</h1>`;
 
   return html_response(src)
 };
