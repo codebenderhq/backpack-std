@@ -17,7 +17,6 @@ const AppHeader = ({name = "oomph", icon="/favicon.png"}) => {
             <link rel="manifest" href="/manifest.json" />
 
             {/*https://developer.mozilla.org/en-US/docs/Web/Manifest*/}
-
         </head>
     )
 }
