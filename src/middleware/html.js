@@ -1,7 +1,6 @@
 import { exists } from "https://deno.land/std/fs/mod.ts";
-// import Markdoc from "npm:@markdoc/markdoc";
+import {compileDoc, getComponents} from "./utls/components/index.js";
 
-const exts = ["html", "jsx"];
 let isError = false;
 let errorPath;
 
@@ -23,6 +22,12 @@ const html_middleware = async (req) => {
   }
 
   src = await exists(tempSrc) ? await Deno.readTextFile(tempSrc) : `<h1>Error In Page</h1>`;
+
+  const components = getComponents(src)
+
+  if(components.length > 0){
+    src = await compileDoc(src,components)
+  }
 
   return html_response(src)
 };
