@@ -49,6 +49,7 @@ const get_data = async (request) => {
 };
 
 const api_middleware = async (request) => {
+  const app_path = window._app;
   const {pathname} = new URL(request.url)
 
   let response;
@@ -76,7 +77,7 @@ const api_middleware = async (request) => {
       oomph.logger.info({ ...data });
     }
 
-    let api_path = `${window._cwd}/${apiPath}${request.method.toLowerCase()}.js`
+    let api_path = `${app_path}/${apiPath}${request.method.toLowerCase()}.js`
 
     // this is to be able to handle the production enviroment
     if(Deno.env.get('env') === "production"){
@@ -98,8 +99,7 @@ const api_middleware = async (request) => {
       delete json.status;
       const searchParam = new URLSearchParams(json);
 
-      // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
-
+      console.log(json)
       const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
         returnPath ? returnPath : "/status"
       }?${searchParam.toString()}`;
@@ -113,10 +113,7 @@ const api_middleware = async (request) => {
             ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
             : null,
       };
-      //       'Access-Control-Allow-Origin': `${isFormType ? 'app.sauveur.xyz' : '*' }`,
-      // return Response.redirect(Location)
-      // convert this to jsx for customizability
-      //             'Access-Control-Allow-Origin': `${isFormType ? 'app.sauveur.xyz' : '*' }`
+
 
       return new Response(null, {
         status: 302,
@@ -127,6 +124,7 @@ const api_middleware = async (request) => {
     response = Response.json(json, {
       status,
     });
+
   } catch (err) {
     console.log(err);
     oomph.logger.info({

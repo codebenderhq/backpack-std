@@ -30,19 +30,19 @@ export const serve = async (isProd, appName) => {
   oomph.req = req;
 
   Deno.serve(async (req) => {
-    const type = req.headers.get("sec-fetch-dest");
-    const cors = req.headers.get("sec-fetch-site");
+    let type = req.headers.get("sec-fetch-dest");
+//    const cors = req.headers.get("sec-fetch-site");
     const content_type = req.headers.get("content-type");
-    const agent = req.headers.get("user-agent");
+//    const agent = req.headers.get("user-agent");
+    type = content_type ? content_type : type
     //        set app path
-    const app_path = !isProd ? "/src/_app" : getAppName(req);
-    window._app = !isProd ? Deno.cwd() : "/apps";
+    window._cwd = !isProd ? Deno.cwd() : `/apps/${appName}`;
     //        enable deployment
     //   await oomph.deploy(req);
 
-    window._cwd = `${window._app}${app_path}`;
+    window._app = `${window._cwd}/src/_app`;
 
-    switch (type || content_type) {
+    switch (type) {
       case "document":
         return html_middleware(req, isProd);
       case "script":

@@ -8,11 +8,12 @@ import { transform } from "npm:lightningcss";
 //import init, { transform } from 'https://esm.run/lightningcss-wasm';
 
 const asset_middlware = async (request, type) => {
+  const _cwd = window._cwd
   const {pathname} = new URL(request.url)
 //  const isServiceWorker = pathname.includes("sw.js");
   try {
     const content_type = `text/${type}`;
-    const file_path = `${window._app}/src/public${pathname}`;
+    const file_path = `${_cwd}/src/public${pathname}`;
 
     // find out if there is a leak here
     if (type === "style") {
@@ -20,8 +21,7 @@ const asset_middlware = async (request, type) => {
 
       // find out if there is a leak here
       const css = await Deno.readTextFile(file_path);
-
-      console.log(file_path,content_type)
+ 
       const result = await postcss([tailwindcss, autoprefixer]).process(css, {
         from: undefined,
       });

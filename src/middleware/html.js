@@ -5,6 +5,7 @@ let isError = false;
 let errorPath;
 
 const html_middleware = async (req) => {
+  const app_path = window._app;
   const paths = new URL(req.url).pathname.replace(/\/$/,"")
   let src;
   const pathArrays = paths.
@@ -13,14 +14,15 @@ const html_middleware = async (req) => {
 
   let tempSrc;
   if (pathArrays.length === 1 && pathArrays[0] !== "") {
-    tempSrc = `${window._cwd}${paths}.html`;
+    tempSrc = `${app_path}${paths}.html`;
   } else if (pathArrays.length > 1) {
     pathArrays.splice(1, 0, "pages");
-    tempSrc = `${window._cwd}/${pathArrays.join('/')}.html`;
+    tempSrc = `${app_path}/${pathArrays.join('/')}.html`;
   } else {
-    tempSrc = `${window._cwd}/index.html`;
+    tempSrc = `${app_path}/index.html`;
   }
 
+  console.log(tempSrc)
   src = await exists(tempSrc) ? await Deno.readTextFile(tempSrc) : `<h1>Error In Page</h1>`;
 
   const components = getComponents(src)

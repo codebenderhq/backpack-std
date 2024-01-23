@@ -26,7 +26,7 @@ export default async ({name, icon}) => {
     const manifest_path = `${window._app}/src/public/manifest.json`
     
     if(exists(manifest_path)){
-        const {default: _manifest} = await import(`${window._app}/src/public/manifest.json`,{
+        const {default: _manifest} = await import(`${window._cwd}/src/public/manifest.json`,{
             assert: {
                 type: "json",
             },
