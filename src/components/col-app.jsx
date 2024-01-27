@@ -6,7 +6,7 @@ import { exists } from "https://deno.land/std/fs/mod.ts";
 
 const ColumnApp = ({content}) => {
     return(
-        <body className="bg-gray-100 w-screen h-full flex flex-col space-y-4">
+        <body className="bg-gray-100 w-screen h-screen flex flex-col space-y-4">
             {content}
         </body>
         )
