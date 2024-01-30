@@ -1,63 +1,38 @@
 import { exists } from "https://deno.land/std/fs/mod.ts";
-// import Markdoc from "npm:@markdoc/markdoc";
+import {compileDoc, getComponents} from "./utls/components/index.js";
 
-const exts = ["html", "jsx"];
 let isError = false;
 let errorPath;
 
-const html_middleware = async (pathname, req) => {
-  let path = `${window.extPath}/src/_app/`;
-  errorPath = `${path}error/pages/index.html`;
+const html_middleware = async (req) => {
+  const app_path = window._app;
+  const paths = new URL(req.url).pathname.replace(/\/$/,"")
+  let src;
+  const pathArrays = paths.
+    replace("/","")
+    .split("/");
 
-  if (!pathname.includes(".")) {
-    let paramPage = "";
-    let jsxPage = false;
-    let page;
-    for (const ext of exts) {
-      let _pageSrc = `${path}/index.${ext}`;
-      paramPage = `${path}@.${ext}`;
-
-      const pathArrays = pathname.split("/");
-      pathArrays.shift();
-
-      if (
-        pathArrays.length === 1 && pathArrays[0] !== "" &&
-          !pathname.includes("@") ||
-        pathname.includes("@") && pathArrays.length !== 1
-      ) {
-        _pageSrc = `${path}${pathname}/pages/index.${ext}`;
-        paramPage = `${path}${pathArrays[0]}/pages/@.${ext}`;
-      } else if (pathname !== "/" && pathArrays.length !== 1) {
-        _pageSrc = `${path}${pathArrays[0]}/pages/${pathArrays[1]}.${ext}`;
-        paramPage = `${path}${pathArrays[0]}/pages/@.${ext}`;
-      }
-      const isParamAvailible = await exists(paramPage);
-      const pageExist = await exists(_pageSrc);
-
-      if (!page && (pageExist || isParamAvailible) && ext !== "jsx") {
-        page = await Deno.readTextFile(
-          pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error(),
-        );
-        if (pageExist || isParamAvailible) {
-          break;
-        }
-      } else if (!pageExist || !isParamAvailible) {
-        page = await Deno.readTextFile(errorPath);
-      }
-
-      if (ext === "jsx" && pageExist || isParamAvailible) {
-        jsxPage = await import(
-          pageExist ? _pageSrc : isParamAvailible ? paramPage : set_error()
-        );
-      }
-    }
-    if (jsxPage) {
-      return new Response(await jsxPage.default(req), {
-        headers: { "content-type": "text/html" },
-      });
-    }
-    return html_response(page);
+  let tempSrc;
+  if (pathArrays.length === 1 && pathArrays[0] !== "") {
+    tempSrc = `${app_path}${paths}.html`;
+  } else if (pathArrays.length > 1) {
+    pathArrays.splice(1, 0, "pages");
+    tempSrc = `${app_path}/${pathArrays.join('/')}.html`;
+  } else {
+    tempSrc = `${app_path}/index.html`;
   }
+
+  console.log(tempSrc)
+  src = await exists(tempSrc) ? await Deno.readTextFile(tempSrc) : `<h1>Error In Page</h1>`;
+
+  const components = getComponents(src)
+
+  console.log(paths)
+  if(components && components.length > 0){
+    src = await compileDoc(src,components, paths)
+  }
+
+  return html_response(src)
 };
 
 const set_error = () => {

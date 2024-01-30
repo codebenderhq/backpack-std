@@ -1,4 +1,4 @@
-import logger from "./logger.ts";
+import logger from "./logger.js";
 
 Error.prototype.log = async function () {
   //    console.log(this)

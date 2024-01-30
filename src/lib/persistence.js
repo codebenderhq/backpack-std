@@ -1,5 +1,5 @@
 //https://docs.oramasearch.com/
-import logger from "./logger.ts";
+import logger from "./logger.js";
 import { create, insert, persist, remove, restore, search } from "./deps.js";
 //import { persist, restore } from "npm:@orama/plugin-data-persistence";
 
@@ -13,10 +13,10 @@ import { create, insert, persist, remove, restore, search } from "./deps.js";
  * @param {NumberLike} x - The magic number.
  */
 const get_kv = async () => {
+  const app_root = window._cwd
   const db_path = window.isQARequest ? "qa-db" : "db";
 
-  const kv_path = window._cwd ? `${window._cwd}/${db_path}` : undefined;
-  console.log(kv_path);
+  const kv_path = app_root ? `${app_root}/${db_path}` : undefined;
   return await Deno.openKv(kv_path);
 };
 
@@ -37,7 +37,7 @@ const get_kv = async () => {
  *
  * @return {OomphDB} oomphdb
  */
-const db = (name: string) => {
+const db = (name) => {
   class OomphDB extends DB {}
 
   const oomphDB = new OomphDB();
@@ -74,7 +74,7 @@ class DB {
   }
 }
 //https://deno.com/manual@v1.34.0/runtime/kv
-globalThis.onload = (e: Event): void => {
+globalThis.onload = (e) => {
   if (Object.isExtensible(Object.prototype)) {
     DB.prototype.kv = get_kv;
     DB.prototype.list = async function () {

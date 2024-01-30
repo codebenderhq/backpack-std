@@ -48,100 +48,94 @@ const get_data = async (request) => {
   return { result: _data, type };
 };
 
-const api_middleware = async (pathname, request) => {
-  const isFormType =
-    request.headers.get("content-type") === "application/x-www-form-urlencoded";
-  const isApiCall = pathname?.includes("api") ||
-    request.headers.get("host")?.includes("api");
-  if (isApiCall || isFormType) {
-    let response;
-    try {
-      let data = {};
-      const auth = request.headers.get("authorization");
-      const host = request.headers.get("host");
-      const { protocol } = new URL(request.url);
-      const referer = request.headers.get("referer");
-      const paths = pathname.split("/");
-      let subPath = "";
-      if (paths.length > 3) {
-        paths.pop();
-      }
+const api_middleware = async (request) => {
+  const app_path = window._app;
+  const {pathname} = new URL(request.url)
 
-      const apiPath = `${paths.reverse().join("/")}${subPath}`;
-
-      // added server cors
-      // if (!is_authenticated(auth) && !isFormType) {
-      //   throw new Error("Unotharized");
-      // }
-
-      if (request.method !== "GET") {
-        data = await get_data(request);
-        oomph.logger.info({ ...data });
-      }
-
-      let api_path = `${window.extPath}/src/_app/${apiPath}${request.method.toLowerCase()}.js`
-
-      // this is to be able to handle the production enviroment 
-      if(Deno.env.get('env') !== "dev"){
-        api_path = `app/${api_path}`
-      }
-
-      const { default: apiMethod } = await import(api_path);
-      const json = await apiMethod(request, data.result);
-
-      const status = json.status;
-      delete json.status;
-
-      if (request.method === "POST") {
-        const returnPath = json.uri;
-        const redirectHost = json.redirect;
-        delete json.redirect;
-        delete json.uri;
-        delete json.body;
-        delete json.status;
-        const searchParam = new URLSearchParams(json);
-
-        // const Location = `https://${redirectHost ? redirectHost: host}${returnPath ? returnPath: '/status'}?${searchParam.toString()}`
-
-        const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
-          returnPath ? returnPath : "/status"
-        }?${searchParam.toString()}`;
-
-        console.log("redirect to", Location);
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
-        // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
-        const headers = {
-          Location,
-          "set-cookie": json?.setCookie
-            ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
-            : null,
-        };
-        //       'Access-Control-Allow-Origin': `${isFormType ? 'app.sauveur.xyz' : '*' }`,
-        // return Response.redirect(Location)
-        // convert this to jsx for customizability
-        //             'Access-Control-Allow-Origin': `${isFormType ? 'app.sauveur.xyz' : '*' }`
-
-        return new Response(null, {
-          status: 302,
-          headers,
-        });
-      }
-
-      response = Response.json(json, {
-        status,
-      });
-    } catch (err) {
-      console.log(err);
-      oomph.logger.info({
-        title: `SERVER:API:ERROR:${request.url}`,
-        msg: err.message,
-        err,
-      });
-      throw new Error(`SERVER:API:ERROR:${request.url}`);
+  let response;
+  try {
+    let data = {};
+    const auth = request.headers.get("authorization");
+    const host = request.headers.get("host");
+    const { protocol } = new URL(request.url);
+    const referer = request.headers.get("referer");
+    const paths = pathname.split("/");
+    let subPath = "";
+    if (paths.length > 3) {
+      paths.pop();
     }
 
-    return response;
+    const apiPath = `${paths.reverse().join("/")}${subPath}`;
+
+    // added server cors
+    // if (!is_authenticated(auth) && !isFormType) {
+    //   throw new Error("Unotharized");
+    // }
+
+    if (request.method !== "GET") {
+      data = await get_data(request);
+      oomph.logger.info({ ...data });
+    }
+
+    let api_path = `${app_path}/${apiPath}${request.method.toLowerCase()}.js`
+
+    // this is to be able to handle the production enviroment
+    if(Deno.env.get('env') === "production"){
+      api_path = `app/${api_path}`
+    }
+
+    const { default: apiMethod } = await import(api_path);
+    const json = await apiMethod(request, data.result);
+
+    const status = json.status;
+    delete json.status;
+
+    if (request.method === "POST") {
+      const returnPath = json.uri;
+      const redirectHost = json.redirect;
+      delete json.redirect;
+      delete json.uri;
+      delete json.body;
+      delete json.status;
+      const searchParam = new URLSearchParams(json);
+
+      console.log(json)
+      const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
+        returnPath ? returnPath : "/status"
+      }?${searchParam.toString()}`;
+
+      console.log("redirect to", Location);
+      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+      // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
+      const headers = {
+        Location,
+        "set-cookie": json?.setCookie
+            ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
+            : null,
+      };
+
+
+      return new Response(null, {
+        status: 302,
+        headers,
+      });
+    }
+
+    response = Response.json(json, {
+      status,
+    });
+
+  } catch (err) {
+    console.log(err);
+    oomph.logger.info({
+      title: `SERVER:API:ERROR:${request.url}`,
+      msg: err.message,
+      err,
+    });
+    throw new Error(`SERVER:API:ERROR:${request.url}`);
   }
+
+  return response;
 };
 
 export default api_middleware;
