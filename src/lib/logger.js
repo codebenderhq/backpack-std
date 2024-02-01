@@ -62,8 +62,6 @@ const readLogs = async () => {
 
 export default {
   info: logger,
-  request: () => {
-  },
   file_logger:file_logger,
   readLogs: readLogs
 };
