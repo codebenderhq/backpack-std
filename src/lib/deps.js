@@ -3,7 +3,6 @@ export { persist, restore } from "npm:@orama/plugin-data-persistence";
 
 import "./error.js";
 import { db, get_kv } from "./persistence.js";
-import deploy from "../middleware/deploy.js";
 //import push from "./middleware/push.js";
 import logger from "./logger.js";
 
@@ -13,7 +12,6 @@ import logger from "./logger.js";
  * Oomph sdk
  */
 export default {
-    deploy,
     logger,
     db,
     get_kv,

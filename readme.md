@@ -1,5 +1,6 @@
 # oomph
 
+
 you don’t need a textbook to be a developer, more importantly you don’t learn
 code to get a job
 
@@ -19,15 +20,19 @@ it twisted
 
 ## Getting Started
 
-`coming soon`
+clone the repo
+
+```
+deno run --unstable -A --watch=./src/  oomph/src/mod.js
+```
 
 ## Tech Debt
 
-- [ ] improve the desccion logic for extensions
+- [x] improve the desccion logic for extensions
 - [ ] protect logs with secret key
 - [ ] update readme file to help with getting started with oomph
 - [ ] include verbose comments on code
 - [x] open kv db at a (specific
       path)[https://deno.land/api@v1.36.1?s=Deno.openKv&unstable=]
-- [ ] upgrade to Deno.serve
+- [x] upgrade to Deno.serve
 - [ ] delete all files when deploying
