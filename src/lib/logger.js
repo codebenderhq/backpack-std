@@ -24,44 +24,41 @@ const logger = async (type, ...body) => {
   }
 };
 
-
 const file_logger = async (msg) => {
-
   const kv = await Deno.openKv(`${import.meta.dirname}/observability/logs`);
 
   const logs = await kv.get(["logs"]);
 
   const log = {
     ...logs.value,
-    [Date.now()]: msg
-  }
+    [Date.now()]: msg,
+  };
 
   const result = await kv.set(["logs"], log);
-}
+};
 
 const readLogs = async () => {
   const kv = await Deno.openKv(`${import.meta.dirname}/observability/logs`);
-//
-//  const result = await kv.get(["logs"]);
+  //
+  //  const result = await kv.get(["logs"]);
   const stream = kv.watch([["logs"]]).getReader();
 
   while (true) {
-    const value = await stream.read()
+    const value = await stream.read();
 
-    if(value.done){
+    if (value.done) {
       break;
     }
-    console.log(value)
+    console.log(value);
   }
-//  for await (const entries of stream) {
-//    console.log(entries[0].value); // "bar"
-//    console.log('why you not updating')
-//  }
-
-}
+  //  for await (const entries of stream) {
+  //    console.log(entries[0].value); // "bar"
+  //    console.log('why you not updating')
+  //  }
+};
 
 export default {
   info: logger,
-  file_logger:file_logger,
-  readLogs: readLogs
+  file_logger: file_logger,
+  readLogs: readLogs,
 };

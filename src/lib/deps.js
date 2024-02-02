@@ -12,7 +12,7 @@ import logger from "./logger.js";
  * Oomph sdk
  */
 export default {
-    logger,
-    db,
-    get_kv,
+  logger,
+  db,
+  get_kv,
 };

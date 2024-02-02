@@ -13,9 +13,9 @@ import { create, insert, persist, remove, restore, search } from "./deps.js";
  * @param {NumberLike} x - The magic number.
  */
 const get_kv = async () => {
-  const app_root = window._cwd
+  const app_root = window._cwd;
   const db_path = window.isQARequest ? "qa-db" : "db";
- 
+
   const kv_path = app_root ? `${app_root}/${db_path}/` : undefined;
   return await Deno.openKv(kv_path);
 };

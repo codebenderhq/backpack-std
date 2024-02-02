@@ -50,7 +50,7 @@ const get_data = async (request) => {
 
 const api_middleware = async (request) => {
   const app_path = window._app;
-  const {pathname} = new URL(request.url)
+  const { pathname } = new URL(request.url);
 
   let response;
   try {
@@ -77,11 +77,11 @@ const api_middleware = async (request) => {
       oomph.logger.info({ ...data });
     }
 
-    let api_path = `${app_path}/${apiPath}${request.method.toLowerCase()}.js`
+    let api_path = `${app_path}/${apiPath}${request.method.toLowerCase()}.js`;
 
     // this is to be able to handle the production enviroment
-    if(Deno.env.get('env') === "production"){
-      api_path = `app/${api_path}`
+    if (Deno.env.get("env") === "production") {
+      api_path = `app/${api_path}`;
     }
 
     const { default: apiMethod } = await import(api_path);
@@ -99,7 +99,7 @@ const api_middleware = async (request) => {
       delete json.status;
       const searchParam = new URLSearchParams(json);
 
-      console.log(json)
+      console.log(json);
       const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
         returnPath ? returnPath : "/status"
       }?${searchParam.toString()}`;
@@ -110,10 +110,9 @@ const api_middleware = async (request) => {
       const headers = {
         Location,
         "set-cookie": json?.setCookie
-            ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
-            : null,
+          ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
+          : null,
       };
-
 
       return new Response(null, {
         status: 302,
@@ -124,7 +123,6 @@ const api_middleware = async (request) => {
     response = Response.json(json, {
       status,
     });
-
   } catch (err) {
     console.log(err);
     oomph.logger.info({

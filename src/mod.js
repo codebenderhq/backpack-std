@@ -1,1 +1,1 @@
-import persistance from "./lib/persistence.js"
+import persistance from "./lib/persistence.js";

@@ -1,6 +1,5 @@
 # oomph
 
-
 you don’t need a textbook to be a developer, more importantly you don’t learn
 code to get a job
 

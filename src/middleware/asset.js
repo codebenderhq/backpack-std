@@ -8,9 +8,9 @@ import { transform } from "npm:lightningcss";
 //import init, { transform } from 'https://esm.run/lightningcss-wasm';
 
 const asset_middlware = async (request, type) => {
-  const _cwd = window._cwd
-  const {pathname} = new URL(request.url)
-//  const isServiceWorker = pathname.includes("sw.js");
+  const _cwd = window._cwd;
+  const { pathname } = new URL(request.url);
+  //  const isServiceWorker = pathname.includes("sw.js");
   try {
     const content_type = `text/${type}`;
     const file_path = `${_cwd}/src/public${pathname}`;
@@ -21,11 +21,10 @@ const asset_middlware = async (request, type) => {
 
       // find out if there is a leak here
       const css = await Deno.readTextFile(file_path);
- 
+
       const result = await postcss([tailwindcss, autoprefixer]).process(css, {
         from: undefined,
       });
-
 
       let { code, map } = transform({
         code: new TextEncoder().encode(result.css),
@@ -37,7 +36,7 @@ const asset_middlware = async (request, type) => {
           "content-type": "text/css",
           "access-control-allow-origin": "*",
           "Access-Control-Allow-Headers":
-              "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+            "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
         },
       });
     } else {
