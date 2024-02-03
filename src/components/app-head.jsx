@@ -17,6 +17,8 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="stylesheet" href="/output.css" />
       <link rel="manifest" href="/manifest.json" />
+      <meta property="og:image" content="/background.jpg"/>
+      <meta name="twitter:image" content="/background.jpg"/>
 
       {/*https://developer.mozilla.org/en-US/docs/Web/Manifest*/}
     </head>
@@ -27,7 +29,6 @@ export default async ({ name, icon }) => {
   const manifest_path = `file:///${window._cwd}/src/public/manifest.json`;
 
   if (exists(manifest_path)) {
-    console.log(manifest_path, "lets get it")
     const { default: _manifest } = await import(
       `file:///${window._cwd}/src/public/manifest.json`,
       {
