@@ -24,11 +24,11 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
 };
 export default async ({ name, icon }) => {
   let manifest = { name: "oomph", icon: "/favicon.png" };
-  const manifest_path = `${window._app}/src/public/manifest.json`;
+  const manifest_path = `app/${window._app}/src/public/manifest.json`;
 
   if (exists(manifest_path)) {
     const { default: _manifest } = await import(
-      `${window._cwd}/src/public/manifest.json`,
+      `app/${window._cwd}/src/public/manifest.json`,
       {
         assert: {
           type: "json",
