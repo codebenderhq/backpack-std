@@ -10,10 +10,9 @@ const script_middleware = async (req, isProd) => {
   // this is to support deployment to a linux enviroment
   if (!Deno.build.os === "windows" && isProd) {
     res = await import(`app/${app_path}${_pathname}`);
-  } else if (!Deno.build.os === "windows" && !isProd){
-    res = await import(`${app_path}${_pathname}`);
   }
 
+  
   if (res.onServer) {
     onServerResult = await res.onServer(_pathname, req);
   }
