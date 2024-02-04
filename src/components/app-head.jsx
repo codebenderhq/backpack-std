@@ -26,7 +26,7 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
 };
 export default async ({ name, icon }) => {
   let manifest = { name: "oomph", icon: "/favicon.png" };
-  const manifest_path = `file:///${window._cwd}/src/public/manifest.json`;
+  const manifest_path = `${Deno.build.os !== "windows" ? "file:///" : "" }${window._cwd}/src/public/manifest.json`;
 
   if (exists(manifest_path)) {
     const { default: _manifest } = await import(
