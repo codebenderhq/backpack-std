@@ -69,7 +69,7 @@ export const compileDoc = async (html, elements, path, isProd) => {
     for (let { path, included } of paths) {
       //
       if (await exists(path) || included) {
-        element_src = await import(`${isProd ? "app/": "file:///"}${path}`);
+        element_src = await import(`${included ? isProd ? "app/": "file:///" : ""}${path}`);
         break;
       }
     }
