@@ -10,6 +10,7 @@ const getComponentsAtributes = (component) => {
   return component.match(atribute_regex);
 };
 
+
 const getGlobalElementPath = (element_name) => {
   return `../../../components/${element_name}.jsx`;
 };
