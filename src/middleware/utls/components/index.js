@@ -50,13 +50,13 @@ export const compileDoc = async (html, elements, path) => {
     const element_name = element_name_match ? element_name_match[1] : undefined;
 
     const paths = [
-      { path: `${app_source}/src/components${path}/${element_name}/index.jsx` }, // private_local_path
+      { path: `file:///${app_source}/src/components${path}/${element_name}/index.jsx` }, // private_local_path
       {
-        path: `${app_source}/src/components/${
+        path: `file:///${app_source}/src/components/${
           path.split("/")[1]
         }/${element_name}/index.jsx`,
       }, // local_path
-      { path: `${app_source}/src/components/global/${element_name}/index.jsx` }, //local_global
+      { path: `file:///${app_source}/src/components/global/${element_name}/index.jsx` }, //local_global
       {
         path: `../../../components/${element_name}.jsx`,
         included: globalElements.includes(element_name),
@@ -67,7 +67,7 @@ export const compileDoc = async (html, elements, path) => {
     for (let { path, included } of paths) {
       //
       if (await exists(path) || included) {
-        element_src = await import(`file:///${path}`);
+        element_src = await import(${path});
         break;
       }
     }
