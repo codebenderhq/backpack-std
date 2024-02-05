@@ -29,7 +29,7 @@ const html_middleware = async (req, isProd) => {
   const components = getComponents(src);
 
   if (components && components.length > 0) {
-    src = await compileDoc(src, components, paths);
+    src = await compileDoc(src, components, paths, isProd);
   }
 
   if (!isProd) {

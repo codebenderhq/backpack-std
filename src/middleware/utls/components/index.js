@@ -15,7 +15,7 @@ const getGlobalElementPath = (element_name) => {
   return `../../../components/${element_name}.jsx`;
 };
 const globalElements = ["app-head"];
-export const compileDoc = async (html, elements, path) => {
+export const compileDoc = async (html, elements, path, isProd) => {
   let new_doc = html;
   let shell_doc;
   const app_source = window._cwd;
@@ -69,7 +69,7 @@ export const compileDoc = async (html, elements, path) => {
     for (let { path, included } of paths) {
       //
       if (await exists(path) || included) {
-        element_src = await import(`${!included ? "file:///" : "" }${path}`);
+        element_src = await import(`${isProd ? "app/": "file:///"}${path}`);
         break;
       }
     }
