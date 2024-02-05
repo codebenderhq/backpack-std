@@ -17,8 +17,25 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="stylesheet" href="/output.css" />
       <link rel="manifest" href="/manifest.json" />
-      <meta property="og:image" content="/background.jpg"/>
-      <meta name="twitter:image" content="/background.jpg"/>
+      <meta property="og:title" content="Sauveur Dev" />
+    <meta
+        property="og:description"
+        content="For the people who shape culture, Glimpse into the future of trade."
+    />
+    <meta property="og:image" content="/background.jpg" />
+    <meta property="og:url" content="https://sauveur.dev" />
+
+    <meta name="twitter:title" content="Sauveur Dev" />
+    <meta
+        name="twitter:description"
+        content="For the people who shape culture, Glimpse into the future of trade."
+    />
+    <meta name="twitter:image" content="/background.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+        name="description"
+        content="For the people who shape culture, Glimpse into the future of trade."
+    />
 
       {/*https://developer.mozilla.org/en-US/docs/Web/Manifest*/}
     </head>
@@ -27,7 +44,7 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
 export default async ({ name, icon }) => {
   let manifest = { name: "oomph", icon: "/favicon.png" };
   const manifest_path = `${Deno.build.os !== "windows" ? "file:///" : "" }${window._cwd}/src/public/manifest.json`;
-
+ 
   if (exists(manifest_path)) {
     const { default: _manifest } = await import(
       `file:///${window._cwd}/src/public/manifest.json`,

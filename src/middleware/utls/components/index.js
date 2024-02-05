@@ -42,10 +42,11 @@ export const compileDoc = async (html, elements, path) => {
       new_doc = new_doc.replace(element[0], _doc);
     });
   }
-
+  
   await Promise.all(elements.map(async (element) => {
     const element_name_regex = /<([a-z]+-[a-z]+)(\s+[^>]+)?\/>/;
     const element_name_match = element.match(element_name_regex);
+  
     const element_name = element_name_match ? element_name_match[1] : undefined;
 
     const paths = [
@@ -66,7 +67,7 @@ export const compileDoc = async (html, elements, path) => {
     for (let { path, included } of paths) {
       //
       if (await exists(path) || included) {
-        element_src = await import(path);
+        element_src = await import(`file:///${path}`);
         break;
       }
     }
@@ -84,6 +85,7 @@ export const compileDoc = async (html, elements, path) => {
         });
       }
 
+ 
       new_doc = new_doc.replace(element, await element_src.default(atrributes));
     }
   }));

@@ -44,7 +44,10 @@ const asset_middlware = async (request, type) => {
     }
   } catch (err) {
     err.log();
-    throw new Error("File Does Not Exist");
+//    throw new Error("File Does Not Exist");
+    return new Response("Internal Server Error", {
+      status: 500,
+    });
   }
 };
 

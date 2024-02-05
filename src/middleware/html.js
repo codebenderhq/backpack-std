@@ -22,7 +22,6 @@ const html_middleware = async (req, isProd) => {
     tempSrc = `${app_path}/index.html`;
   }
 
-  console.log(tempSrc);
   src = await exists(tempSrc)
     ? await Deno.readTextFile(tempSrc)
     : `<h1>Error In Page</h1>`;
