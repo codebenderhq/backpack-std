@@ -43,7 +43,7 @@ export const compileDoc = async (html, elements, path) => {
       new_doc = new_doc.replace(element[0], _doc);
     });
   }
-  
+
   await Promise.all(elements.map(async (element) => {
     const element_name_regex = /<([a-z]+-[a-z]+)(\s+[^>]+)?\/>/;
     const element_name_match = element.match(element_name_regex);
@@ -51,24 +51,25 @@ export const compileDoc = async (html, elements, path) => {
     const element_name = element_name_match ? element_name_match[1] : undefined;
 
     const paths = [
-      { path: `${Deno.build.os !== "windows" ? "file:///" : "" }${app_source}/src/components${path}/${element_name}/index.jsx` }, // private_local_path
+      { path: `${app_source}/src/components${path}/${element_name}/index.jsx` }, // private_local_path
       {
-        path: `${Deno.build.os !== "windows" ? "file:///" : "" }${app_source}/src/components/${
+        path: `${app_source}/src/components/${
           path.split("/")[1]
         }/${element_name}/index.jsx`,
       }, // local_path
-      { path: `${Deno.build.os !== "windows" ? "file:///" : "" }${app_source}/src/components/global/${element_name}/index.jsx` }, //local_global
+      { path: `${app_source}/src/components/global/${element_name}/index.jsx` }, //local_global
       {
         path: `../../../components/${element_name}.jsx`,
         included: globalElements.includes(element_name),
       }, //global
     ];
 
+  
     let element_src;
     for (let { path, included } of paths) {
       //
       if (await exists(path) || included) {
-        element_src = await import(path);
+        element_src = await import(`${!included ? "file:///" : "" }${path}`);
         break;
       }
     }
@@ -86,7 +87,7 @@ export const compileDoc = async (html, elements, path) => {
         });
       }
 
- 
+  
       new_doc = new_doc.replace(element, await element_src.default(atrributes));
     }
   }));
