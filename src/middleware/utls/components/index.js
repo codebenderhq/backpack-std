@@ -51,13 +51,13 @@ export const compileDoc = async (html, elements, path) => {
     const element_name = element_name_match ? element_name_match[1] : undefined;
 
     const paths = [
-      { path: `file:///${app_source}/src/components${path}/${element_name}/index.jsx` }, // private_local_path
+      { path: `${Deno.build.os !== "windows" ? "file:///" : "" }${app_source}/src/components${path}/${element_name}/index.jsx` }, // private_local_path
       {
-        path: `file:///${app_source}/src/components/${
+        path: `${Deno.build.os !== "windows" ? "file:///" : "" }${app_source}/src/components/${
           path.split("/")[1]
         }/${element_name}/index.jsx`,
       }, // local_path
-      { path: `file:///${app_source}/src/components/global/${element_name}/index.jsx` }, //local_global
+      { path: `${Deno.build.os !== "windows" ? "file:///" : "" }${app_source}/src/components/global/${element_name}/index.jsx` }, //local_global
       {
         path: `../../../components/${element_name}.jsx`,
         included: globalElements.includes(element_name),
