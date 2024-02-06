@@ -46,21 +46,21 @@ export default async ({ name, icon }) => {
   const manifest_path = `${window._cwd}/src/public/manifest.json`;
 
   // file:///$
-  try {
-    console.log(await exists(manifest_path), "manifest exists");
-    const { default: _manifest } = await import(
-      `${manifest_path.replace('C:',"file:///")}`,
-      {
-        assert: {
-          type: "json",
-        },
-      }
-    );
+  // try {
+  //   console.log(await exists(manifest_path), "manifest exists");
+  //   const { default: _manifest } = await import(
+  //     `${manifest_path.replace('C:',"file:///")}`,
+  //     {
+  //       assert: {
+  //         type: "json",
+  //       },
+  //     }
+  //   );
 
-    console.log(_manifest, "manifest file");
-  } catch (err) {
-    console.log(err);
-  }
+  //   console.log(_manifest, "manifest file");
+  // } catch (err) {
+  //   console.log(err);
+  // }
 
   // if (exists(manifest_path)) {
   //   console.log(manifest_path, "it exists")
