@@ -49,7 +49,7 @@ export default async ({ name, icon }) => {
   try {
     console.log(await exists(manifest_path), "manifest exists");
     const { default: _manifest } = await import(
-      `${manifest_path.replace('c:',"file:///")}`,
+      `${manifest_path.replace('C:',"file:///")}`,
       {
         assert: {
           type: "json",
