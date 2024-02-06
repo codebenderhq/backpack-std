@@ -10,7 +10,7 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <title>{name}</title>
       <meta
         name="description"
-        content="Split your expenses amongst your freinds"
+        content="For the people who shape culture, Glimpse into the future of trade"
       />
       <link rel="icon" type="image/png" href={icon} />
       <link rel="apple-touch-icon" href={icon} />
