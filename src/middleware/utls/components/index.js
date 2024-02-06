@@ -10,7 +10,6 @@ const getComponentsAtributes = (component) => {
   return component.match(atribute_regex);
 };
 
-
 const getGlobalElementPath = (element_name) => {
   return `../../../components/${element_name}.jsx`;
 };
@@ -47,7 +46,7 @@ export const compileDoc = async (html, elements, path, isProd) => {
   await Promise.all(elements.map(async (element) => {
     const element_name_regex = /<([a-z]+-[a-z]+)(\s+[^>]+)?\/>/;
     const element_name_match = element.match(element_name_regex);
-  
+
     const element_name = element_name_match ? element_name_match[1] : undefined;
 
     const paths = [
@@ -64,17 +63,16 @@ export const compileDoc = async (html, elements, path, isProd) => {
       }, //global
     ];
 
-  
     let element_src;
     for (let { path, included } of paths) {
-      console.log(path,await exists(path) )
+      console.log(path, await exists(path));
       if (await exists(path) || included) {
-        if(included){
+        if (included) {
           element_src = await import(path);
-        }else{
-          element_src = await import(`${isProd ? "app/": "file:///"}${path}`);
+        } else {
+          element_src = await import(`${isProd ? "app/" : "file:///"}${path}`);
         }
-  
+
         break;
       }
     }
@@ -92,7 +90,6 @@ export const compileDoc = async (html, elements, path, isProd) => {
         });
       }
 
-  
       new_doc = new_doc.replace(element, await element_src.default(atrributes));
     }
   }));

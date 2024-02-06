@@ -12,7 +12,6 @@ const script_middleware = async (req, isProd) => {
     res = await import(`app/${app_path}${_pathname}`);
   }
 
-  
   if (res.onServer) {
     onServerResult = await res.onServer(_pathname, req);
   }

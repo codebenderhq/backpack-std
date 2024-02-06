@@ -4,8 +4,8 @@ import postcss from "npm:postcss";
 import autoprefixer from "npm:autoprefixer";
 import tailwindcss from "npm:tailwindcss";
 // https://lightningcss.dev/docs.html
-import { transform } from "npm:lightningcss";
-//import init, { transform } from 'https://esm.run/lightningcss-wasm';
+// import { transform } from "npm:lightningcss";
+import init, { transform } from 'https://esm.run/lightningcss-wasm';
 
 const asset_middlware = async (request, type) => {
   const _cwd = window._cwd;
@@ -44,7 +44,7 @@ const asset_middlware = async (request, type) => {
     }
   } catch (err) {
     err.log();
-//    throw new Error("File Does Not Exist");
+    //    throw new Error("File Does Not Exist");
     return new Response("Internal Server Error", {
       status: 500,
     });

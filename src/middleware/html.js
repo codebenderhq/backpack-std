@@ -41,11 +41,11 @@ const html_middleware = async (req, isProd) => {
 
 const getManifest = async (isProd) => {
   const app_path = window._app;
-  let manifest_path = `file:///${app_path}/src/public/manifest.json`
+  let manifest_path = `file:///${app_path}/src/public/manifest.json`;
 
   if (!Deno.build.os === "windows" && isProd) {
     manifest_path = `app/${app_path}/src/public/manifest.json`;
-  } else if (!Deno.build.os === "windows" && !isProd){
+  } else if (!Deno.build.os === "windows" && !isProd) {
     manifest_path = await import(`${app_path}/src/public/manifest.json`);
   }
 
@@ -57,9 +57,9 @@ const getManifest = async (isProd) => {
           type: "json",
         },
       }
-      );
+    );
   }
-}
+};
 
 const set_error = () => {
   isError = true;
