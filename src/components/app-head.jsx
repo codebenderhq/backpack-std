@@ -20,7 +20,7 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <meta property="og:title" content="Sauveur Dev" />
       <meta
         property="og:description"
-        content="For the people who shape culture, Glimpse into the future of trade."
+        content="For the people who shape culture."
       />
       <meta property="og:image" content="/background.jpg" />
       <meta property="og:url" content="https://sauveur.dev" />
@@ -28,13 +28,13 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <meta name="twitter:title" content="Sauveur Dev" />
       <meta
         name="twitter:description"
-        content="For the people who shape culture, Glimpse into the future of trade."
+        content="For the people who shape culture."
       />
       <meta name="twitter:image" content="/background.jpg" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="description"
-        content="For the people who shape culture, Glimpse into the future of trade."
+        content="For the people who shape culture."
       />
 
       {/*https://developer.mozilla.org/en-US/docs/Web/Manifest*/}
@@ -56,7 +56,7 @@ export default async ({ name, icon }) => {
       manifest.icon = _manifest.icons[0].src;
     }
   } catch (err) {
-    console.log("failed tp load manifest");
+    console.log("failed to load manifest");
   }
 
   return renderToString(
