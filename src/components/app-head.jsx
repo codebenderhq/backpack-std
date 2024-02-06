@@ -45,37 +45,18 @@ export default async ({ name, icon }) => {
   let manifest = { name: "oomph", icon: "/favicon.png" };
   const manifest_path = `${window._cwd}/src/public/manifest.json`;
   console.log(manifest_path, "manifest path")
+  console.log(await exists(manifest_path), "manifest exists")
 
-  // file:///$
-  // try {
-  //   console.log(await exists(manifest_path), "manifest exists");
-  //   const { default: _manifest } = await import(
-  //     `${manifest_path.replace('C:',"file:///")}`,
-  //     {
-  //       assert: {
-  //         type: "json",
-  //       },
-  //     }
-  //   );
-
-  //   console.log(_manifest, "manifest file");
-  // } catch (err) {
-  //   console.log(err);
-  // }
-
-  // if (exists(manifest_path)) {
-  //   console.log(manifest_path, "it exists")
-  // const { default: _manifest } = await import(
-  //   manifest_path,
-  //   {
-  //     assert: {
-  //       type: "json",
-  //     },
-  //   }
-  //   );
-  //   manifest.name = _manifest.name;
-  //   manifest.icon = _manifest.icons[0].src;
-  // }
+  try{
+    if(await exists(manifest_path)){
+      const { default: _manifest } = await import(`file://${manifest_path}`,{assert: {type:"json"}})
+      manifest.name = _manifest.name;
+      manifest.icon = _manifest.icons[0].src;
+    }
+    
+  }catch(err){
+    console.log('failed tp load manifest')
+  }
 
   return renderToString(
     <AppHeader name={manifest.name} icon={manifest.icon} />,
