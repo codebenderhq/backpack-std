@@ -16,8 +16,8 @@ const get_kv = async () => {
   const app_root = window._cwd;
   const db_path = window.isQARequest ? "qa-db" : "db";
 
-  const kv_path = app_root ? `${app_root}/${db_path}/` : undefined;
-  return await Deno.openKv(kv_path);
+  const kv_path = app_root && Deno.build.os !== "windows" ? `${app_root}/${db_path}/` : undefined;
+  return await Deno.openKv(`${kv_path}`);
 };
 
 /**

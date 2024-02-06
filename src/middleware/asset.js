@@ -4,7 +4,7 @@ import postcss from "npm:postcss";
 import autoprefixer from "npm:autoprefixer";
 import tailwindcss from "npm:tailwindcss";
 // https://lightningcss.dev/docs.html
-// import { transform } from "npm:lightningcss";
+//import { transform } from "npm:lightningcss";
 import init, { transform } from 'https://esm.run/lightningcss-wasm';
 
 const asset_middlware = async (request, type) => {
@@ -17,6 +17,7 @@ const asset_middlware = async (request, type) => {
 
     // find out if there is a leak here
     if (type === "style") {
+      await init()
       //TODO: when a change is made here testing using the native object protoype for persistence shoudl be tried again
 
       // find out if there is a leak here
