@@ -22,9 +22,10 @@ const html_middleware = async (req, isProd) => {
     tempSrc = `${app_path}/index.html`;
   }
 
+  const paramPage = `${app_path}${paths}/@.html`
   src = await exists(tempSrc)
-    ? await Deno.readTextFile(tempSrc)
-    : `<h1>Error In Page</h1>`;
+    ? await Deno.readTextFile(tempSrc) 
+    : await exists(paramPage) ?  await Deno.readTextFile(paramPage)  : `<h1>Error In Page</h1>`;
 
   const components = getComponents(src);
 
