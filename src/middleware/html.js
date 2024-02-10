@@ -25,7 +25,7 @@ const html_middleware = async (req, isProd) => {
   const paramArray = pathArrays
   paramArray.pop()
 
-  const paramPage = `${app_path}${paramArray.join('/')}/@.html`;
+  const paramPage = `${app_path}/${paramArray.join('/')}/@.html`;
   console.log(paramPage)
   src = await exists(tempSrc)
     ? await Deno.readTextFile(tempSrc)
