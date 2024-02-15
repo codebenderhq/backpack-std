@@ -31,12 +31,12 @@ const html_middleware = async (req, isProd) => {
     ? await Deno.readTextFile(tempSrc)
     : await exists(paramPage)
     ? await Deno.readTextFile(paramPage)
-    : `<h1>Error In Page</h1>`;
+    : `<app-head/><div class="w-screen h-screen flex items-center justify-center">To get lost is to learn the way </h1>`;
 
   const components = getComponents(src);
 
   if (components && components.length > 0) {
-    src = await compileDoc(src, components, paths, isProd);
+    src = await compileDoc(src, components, paths, isProd, req);
   }
 
   if (!isProd) {

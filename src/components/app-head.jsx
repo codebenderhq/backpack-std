@@ -41,11 +41,11 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
     </head>
   );
 };
-export default async ({ name, icon }) => {
+export default async ({ req, attributes }) => {
   let manifest = { name: "oomph", icon: "/favicon.png" };
   const manifest_path = `${window._cwd}/src/public/manifest.json`;
-  console.log(manifest_path, "manifest path");
-  console.log(await exists(manifest_path), "manifest exists");
+  // console.log(manifest_path, "manifest path");
+  // console.log(await exists(manifest_path), "manifest exists");
 
   try {
     if (await exists(manifest_path)) {
