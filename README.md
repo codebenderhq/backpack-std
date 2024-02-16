@@ -34,7 +34,15 @@ Deno.serve((request) => {
 });
 ```
 
+test out oomph with this [template repo](https://github.com/codebenderhq/sauveur.dev)
+
+## Guide 
+- Install Visual Studio Code Deno Extension [here](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
+
 ## Tech Debt
 
 - [ ] migrate to typescript
 - [ ] improve documentation
+- [ ] create visual studio code extension
+
+
