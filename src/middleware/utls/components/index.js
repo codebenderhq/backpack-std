@@ -1,4 +1,4 @@
-import{exists}from "jsr:@std/fs/exists";
+import{exists}from "jsr:@std/fs@0.216/exists";
 
 export const getComponents = (doc) => {
   const regex = /<([a-z]+-[a-z]+)(\s+[a-z-]+="[^"]*")*\/?>/g;

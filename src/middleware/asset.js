@@ -1,4 +1,4 @@
-import { serveFile } from "jsr:@std/http/file_server";
+import { serveFile } from "jsr:@std/http@0.216.0/file_server";
 // https://postcss.org/api/
 import postcss from "npm:postcss";
 import autoprefixer from "npm:autoprefixer";

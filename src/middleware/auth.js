@@ -1,4 +1,4 @@
-import { getCookies } from "jsr:@std/http/cookie";
+import { getCookies } from "jsr:@std/http@0.216/cookie";
 
 const getAuthToken = (req) => {
   const { id } = getCookies(req.headers);
