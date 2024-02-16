@@ -6,7 +6,7 @@ import tailwindcss from "npm:tailwindcss@latest";
 // https://lightningcss.dev/docs.html
 import { transform } from "npm:lightningcss@latest";
 
-const asset_middlware = async (request, type) => {
+const asset_middlware = async (request:Request, type:string) :Promise<Response> => {
   const _cwd = window._cwd;
   const { pathname } = new URL(request.url);
   //  const isServiceWorker = pathname.includes("sw.js");
