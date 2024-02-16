@@ -38,11 +38,5 @@ Deno.serve((request) => {
 
 ## Tech Debt
 
-- [x] improve the desccion logic for extensions
-- [ ] protect logs with secret key
-- [ ] update readme file to help with getting started with oomph
-- [ ] include verbose comments on code
-- [x] open kv db at a (specific
-      path)[https://deno.land/api@v1.36.1?s=Deno.openKv&unstable=]
-- [x] upgrade to Deno.serve
-- [ ] delete all files when deploying
+- [ ] migrate to typescript
+- [ ] improve documentation
