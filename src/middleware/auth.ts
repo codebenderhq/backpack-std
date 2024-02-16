@@ -1,17 +1,17 @@
 import { getCookies } from "jsr:@std/http@0.216/cookie";
 
-const getAuthToken = (req) => {
+const getAuthToken = (req:Request) => {
   const { id } = getCookies(req.headers);
 
   return id ? id : req.headers.get("authorization");
 };
 
-const isAuthenticated = (req) => {
+const isAuthenticated = (req:Request) => {
   const id = getAuthToken(req);
   return id ? true : false;
 };
 
-const authenticate = async (pathname, request) => {
+const authenticate = async (pathname:string, request:Request) => {
   if (!isAuthenticated(request)) {
     const { pathname } = new URL(request.url);
 
