@@ -1,7 +1,6 @@
 # oomph
 
-you don’t need a textbook to be a developer, more importantly you don’t learn
-code to get a job
+you don’t need a textbook to be a developer, more importantly you don’t learn code to get a job
 
 You learn code for the same reason you learned to read and write
 
@@ -9,20 +8,34 @@ It is a way for you to communicate, your beliefs
 
 Express your passion and build value not just for yourself but for others
 
-And that is what oomph aims to help you get right, building solutions that not
-only improve your life but those of your friends too
+And that is what oomph aims to help you get right, building solutions that not only improve your life but those of your friends too
 
-What do you want to build
-
-NB: there is a difference between a computer scientist and a developer don’t get
-it twisted
+What do you want to build?
 
 ## Getting Started
 
-clone the repo
+Below is an example of a simple server using oomph core libaries, that
+servers an html site
 
 ```
-deno run --unstable -A --watch=./src/  oomph/src/mod.js
+import {
+  asset_middlware,
+  html_middleware,
+} from "jsr:@oomph/core@0.0";
+
+import { req } from "./lib/services.js";
+
+Deno.serve(options, (request) => {
+     let { pathname } = new URL(request.url);
+     
+     window._app = `Deno.cwd()/src/_app`
+     if(pathname.includes('.')){
+      return asset_middlware(request);
+     }else{
+      return html_middleware(request);
+     }
+  });
+
 ```
 
 ## Tech Debt
