@@ -2,6 +2,7 @@ name: Publish
 on:
   push:
     branches:
+      - support/jsr
       - main
 
 jobs:

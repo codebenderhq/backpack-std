@@ -1,11 +1,10 @@
-import { serveFile } from "https://deno.land/std/http/file_server.ts";
+import { serveFile } from "../lib/std/file_server.ts";
 // https://postcss.org/api/
-import postcss from "npm:postcss";
-import autoprefixer from "npm:autoprefixer";
-import tailwindcss from "npm:tailwindcss";
+import postcss from "npm:postcss@latest";
+import autoprefixer from "npm:autoprefixer@latest";
+import tailwindcss from "npm:tailwindcss@latest";
 // https://lightningcss.dev/docs.html
-//import { transform } from "npm:lightningcss";
-import init, { transform } from "https://esm.run/lightningcss-wasm";
+import { transform } from "npm:lightningcss@latest";
 
 const asset_middlware = async (request, type) => {
   const _cwd = window._cwd;
@@ -17,7 +16,6 @@ const asset_middlware = async (request, type) => {
 
     // find out if there is a leak here
     if (type === "style") {
-      await init();
       //TODO: when a change is made here testing using the native object protoype for persistence shoudl be tried again
 
       // find out if there is a leak here

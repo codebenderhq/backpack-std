@@ -1,4 +1,4 @@
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import{exists}from "jsr:@std/fs@0.216/exists";
 import { compileDoc, getComponents } from "./utls/components/index.js";
 
 let isError = false;
