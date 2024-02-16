@@ -5,7 +5,7 @@ export {
     script_middleware,
   } from "./middleware/index.ts";
   
-  import oomph from "./lib/deps.js";
+  import oomph from "./lib/deps.ts";
   
   export { oomph };
   
