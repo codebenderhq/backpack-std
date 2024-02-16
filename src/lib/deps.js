@@ -1,4 +1,4 @@
-export { create, insert, remove, search } from "npm:@orama/orama";
+export { create, insert, remove, search } from "jsr:@orama/orama@2";
 export { persist, restore } from "npm:@orama/plugin-data-persistence";
 
 import "./error.js";

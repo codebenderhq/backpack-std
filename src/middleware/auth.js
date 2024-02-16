@@ -1,4 +1,4 @@
-import { getCookies } from "https://deno.land/std/http/cookie.ts";
+import { getCookies } from "jsr:@std/http/cookie";
 
 const getAuthToken = (req) => {
   const { id } = getCookies(req.headers);

@@ -1,4 +1,4 @@
-import { exists } from "https://deno.land/std/fs/mod.ts";
+import{exists}from "jsr:@std/fs/exists";
 
 export const getComponents = (doc) => {
   const regex = /<([a-z]+-[a-z]+)(\s+[a-z-]+="[^"]*")*\/?>/g;
