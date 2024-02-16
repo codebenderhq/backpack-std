@@ -21,21 +21,19 @@ servers an html site
 import {
   asset_middlware,
   html_middleware,
-} from "jsr:@oomph/core@0.0";
+} from "jsr:@oomph/core@0.0.2";
 
-import { req } from "./lib/services.js";
 
-Deno.serve(options, (request) => {
+Deno.serve((request) => {
      let { pathname } = new URL(request.url);
      
-     window._app = `Deno.cwd()/src/_app`
+     window._app = `${Deno.cwd()}/src/_app`
      if(pathname.includes('.')){
       return asset_middlware(request);
      }else{
       return html_middleware(request);
      }
-  });
-
+});
 ```
 
 ## Tech Debt
