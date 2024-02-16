@@ -10,12 +10,13 @@
 // https://datatracker.ietf.org/doc/html/draft-ietf-webpush-vapid-02#section-4
 // https://datatracker.ietf.org/doc/html/rfc8030#section-8
 // https://blog.mozilla.org/services/2016/04/04/using-vapid-with-webpush/
+
 import { generateKeys, getHeaders, getRawKey } from "../lib/vapid/index.js";
 
-const push = async (request) => {
-  const { pathname, searchParams } = oomph.req(request);
+const push = async (request:Request): Promise<Response | undefined> => {
+  const { pathname, searchParams }:  = oomph.req(request);
 
-  const publicKey = Deno.env.get("PUSH_PUBLIC_KEY");
+  const publicKey:string | undefined = Deno.env.get("PUSH_PUBLIC_KEY");
 
   if (pathname === "/push/vapidPublicKey" && request.method === "GET") {
     return new Response(await getRawKey());
