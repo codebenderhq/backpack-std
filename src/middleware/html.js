@@ -22,11 +22,11 @@ const html_middleware = async (req, isProd) => {
     tempSrc = `${app_path}/index.html`;
   }
 
-  const paramArray = pathArrays
-  paramArray.pop()
+  const paramArray = pathArrays;
+  paramArray.pop();
 
-  const paramPage = `${app_path}/${paramArray.join('/')}/@.html`;
-  console.log(paramPage)
+  const paramPage = `${app_path}/${paramArray.join("/")}/@.html`;
+
   src = await exists(tempSrc)
     ? await Deno.readTextFile(tempSrc)
     : await exists(paramPage)

@@ -1,2 +1,4 @@
 .env
 deno.json
+oomph.tar.gz
+deno.lock

@@ -65,7 +65,6 @@ export const compileDoc = async (html, elements, path, isProd, req) => {
 
     let element_src;
     for (let { path, included } of paths) {
-
       if (await exists(path) || included) {
         if (included) {
           element_src = await import(path);
@@ -76,7 +75,7 @@ export const compileDoc = async (html, elements, path, isProd, req) => {
         break;
       }
     }
-
+ 
     if (element_src) {
       const element_atrribute = getComponentsAtributes(element);
       const atrributes = {};
@@ -90,10 +89,9 @@ export const compileDoc = async (html, elements, path, isProd, req) => {
         });
       }
 
-      const element_component = await element_src.default({req, atrributes})
+      const element_component = await element_src.default({ req, atrributes });
 
-      new_doc = new_doc.replace(element,element_component );
-   
+      new_doc = new_doc.replace(element, element_component);
     }
   }));
 
