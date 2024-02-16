@@ -1,4 +1,4 @@
-import { serveFile } from "https://deno.land/std/http/file_server.ts";
+import { serveFile } from "jsr:@std/http/file_server";
 // https://postcss.org/api/
 import postcss from "npm:postcss";
 import autoprefixer from "npm:autoprefixer";
