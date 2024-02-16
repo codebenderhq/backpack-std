@@ -1,4 +1,4 @@
-import html from "./html.js";
+import html from "./html.ts";
 
 
 const valid_domain = (referer: string): boolean => {

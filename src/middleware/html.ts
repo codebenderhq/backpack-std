@@ -2,11 +2,11 @@ import{exists}from "jsr:@std/fs@0.216/exists";
 import { compileDoc, getComponents } from "./utls/components/index.js";
 
 let isError = false;
-let errorPath;
+let errorPath:any;
 
-const html_middleware = async (req, isProd) => {
+const html_middleware = async (req:Request, isProd:boolean): Promise<Response> => {
   const app_path = window._app;
-  const paths = new URL(req.url).pathname.replace(/\/$/, "");
+  const paths : string = new URL(req.url).pathname.replace(/\/$/, "");
   let src;
   const pathArrays = paths
     .replace("/", "")
@@ -22,7 +22,7 @@ const html_middleware = async (req, isProd) => {
     tempSrc = `${app_path}/index.html`;
   }
 
-  const paramArray = pathArrays;
+  const paramArray: string[] = pathArrays;
   paramArray.pop();
 
   const paramPage = `${app_path}/${paramArray.join("/")}/@.html`;
@@ -46,7 +46,7 @@ const html_middleware = async (req, isProd) => {
   return html_response(src);
 };
 
-const getManifest = async (isProd) => {
+const getManifest = async (isProd: boolean) => {
   const app_path = window._app;
   let manifest_path = `file:///${app_path}/src/public/manifest.json`;
 
