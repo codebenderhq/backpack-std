@@ -1,6 +1,6 @@
 import { serveFile } from "jsr:@std/http@0.216.0/file_server";
 // https://postcss.org/api/
-import postcss from "npm:postcss";
+import postcss from "npm:postcss@latest";
 import autoprefixer from "npm:autoprefixer";
 import tailwindcss from "npm:tailwindcss";
 // https://lightningcss.dev/docs.html
