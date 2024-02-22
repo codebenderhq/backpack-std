@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.216.0/assert/mod.ts"
 import push from "../../src/middleware/push.ts"; 
 
 Deno.test("Test /push endpoint for POST request", async () => {
