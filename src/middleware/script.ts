@@ -1,4 +1,4 @@
-const script_middleware = async (req) => {
+const script_middleware = async (req:Request) : Promise<Response> => {
   const app_path = window._app;
   const { pathname: _pathname } = new URL(req.url);
   console.log(_pathname);

@@ -1,8 +1,8 @@
-const logger = async (type, ...body) => {
+const logger = async (type, ...body) : Promise<void>=> {
   try {
-    const kv = await Deno.openKv();
-    const id = Date.now();
-    const key = ["Log", id];
+    const kv: Deno.Kv = await Deno.openKv();
+    const id:number = Date.now();
+    const key: (string | number)[] = ["Log", id];
     let value;
 
     if (typeof body[0] === "object") {
@@ -24,27 +24,27 @@ const logger = async (type, ...body) => {
   }
 };
 
-const file_logger = async (msg) => {
-  const kv = await Deno.openKv(`${import.meta.dirname}/observability/logs`);
+const file_logger = async (msg:string) => {
+  const kv:Deno.Kv = await Deno.openKv(`${import.meta.dirname}/observability/logs`);
 
-  const logs = await kv.get(["logs"]);
+  const logs:Deno.KvEntryMaybe<unknown> = await kv.get(["logs"]);
 
   const log = {
     ...logs.value,
     [Date.now()]: msg,
   };
 
-  const result = await kv.set(["logs"], log);
+  const result:Deno.KvCommitResult = await kv.set(["logs"], log);
 };
 
 const readLogs = async () => {
-  const kv = await Deno.openKv(`${import.meta.dirname}/observability/logs`);
+  const kv:Deno.Kv = await Deno.openKv(`${import.meta.dirname}/observability/logs`);
   //
   //  const result = await kv.get(["logs"]);
-  const stream = kv.watch([["logs"]]).getReader();
+  const stream: ReadableStreamDefaultReader<[Deno.KvEntryMaybe<unknown>]> = kv.watch([["logs"]]).getReader();
 
   while (true) {
-    const value = await stream.read();
+    const value: ReadableStreamDefaultReadResult<[Deno.KvEntryMaybe<unknown>]> = await stream.read();
 
     if (value.done) {
       break;

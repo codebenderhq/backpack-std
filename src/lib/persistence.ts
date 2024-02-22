@@ -1,6 +1,6 @@
 //https://docs.oramasearch.com/
-import logger from "./logger.js";
-import { create, insert, persist, remove, restore, search } from "./deps.js";
+import logger from "./logger.ts";
+import { create, insert, persist, remove, restore, search } from "./deps.ts";
 //import { persist, restore } from "npm:@orama/plugin-data-persistence";
 
 /**
@@ -14,9 +14,9 @@ import { create, insert, persist, remove, restore, search } from "./deps.js";
  */
 const get_kv = async () => {
   const app_root = window._cwd;
-  const db_path = window.isQARequest ? "qa-db" : "db";
+  const db_path:string = window.isQARequest ? "qa-db" : "db";
 
-  const kv_path = app_root && Deno.build.os !== "windows"
+  const kv_path: string | undefined = app_root && Deno.build.os !== "windows"
     ? `${app_root}/${db_path}/`
     : undefined;
   return await Deno.openKv(`${kv_path}`);
@@ -51,7 +51,7 @@ const db = (name) => {
 
 class DB {
   schema = {};
-  dbName;
+  dbName:string;
   oramaDB;
   //  for now search everything
 
@@ -59,7 +59,7 @@ class DB {
     this.dbName = this.constructor.name;
   }
 
-  async search(term) {
+  async search(term:string):Promise<[]> {
     const kv = await get_kv();
     const res = await kv.get(["orama", this.dbName]);
 

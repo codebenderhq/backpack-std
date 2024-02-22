@@ -1,28 +1,32 @@
-import html from "./html.js";
+import html from "./html.ts";
 
-const valid_domain = (referer) => {
+
+const valid_domain = (referer: string): boolean => {
   // need to handle valid domain better as a person could just read the code and figure out what refer to use
   return ["sauveur.xyz", "http://localhost:8080/", "mmereko.co.za"].includes(
     referer,
   );
 };
 
-const is_authenticated = (auth) => {
+const is_authenticated = (auth:string): boolean => {
   return [Deno.env.get("SERVER_KEY")].includes(auth);
 };
-
-const get_data = async (request) => {
+type get_data_response = {
+  result: {},
+  type:string
+}
+const get_data = async (request:Request) :  Promise<get_data_response>=> {
   let _data = {};
   let type = "json";
-  const referer = request.headers.get("referer");
-  const isFormReq = request.headers.get("content-type") ===
+  const referer: string | null = request.headers.get("referer");
+  const isFormReq : boolean = request.headers.get("content-type") ===
     "application/x-www-form-urlencoded";
-  const isBlob =
+  const isBlob : boolean =
     request.headers.get("content-type") === "application/octet-stream";
 
   if (isFormReq && referer) {
     let referer = new URL(request.headers.get("referer"));
-    let data = new URLSearchParams(await request.text());
+    let data: URLSearchParams = new URLSearchParams(await request.text());
 
     for (const key of data.keys()) {
       const value = data.get(key);
@@ -48,18 +52,18 @@ const get_data = async (request) => {
   return { result: _data, type };
 };
 
-const api_middleware = async (request) => {
+const api_middleware = async (request: Request) : Promise<Response> => {
   const app_path = window._app;
   const { pathname } = new URL(request.url);
 
   let response;
   try {
     let data = {};
-    const auth = request.headers.get("authorization");
-    const host = request.headers.get("host");
+    const auth: string | null = request.headers.get("authorization");
+    const host : string | null = request.headers.get("host");
     const { protocol } = new URL(request.url);
     const referer = request.headers.get("referer");
-    const paths = pathname.split("/");
+    const paths : string[] = pathname.split("/");
     let subPath = "";
     if (paths.length > 3) {
       paths.pop();
