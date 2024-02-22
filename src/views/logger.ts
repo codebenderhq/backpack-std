@@ -3,12 +3,12 @@ const logView = async (request:Request) :Promise<Response | undefined> => {
 
   if (pathname === "/logs" && request.method === "GET") {
     const kv: Deno.Kv = await Deno.openKv();
-    const log: Deno.KvListIterator<unknown> = await kv.list({ prefix: ["Log"] });
+    const log: Deno.KvListIterator<any> = await kv.list({ prefix: ["Log"] });
 
     //        for await (const entry of log) {
     //            kv.delete(entry.key)
     //        }
-    const logs: Array<Deno.KvEntry<unknown>> = [];
+    const logs: Array<Deno.KvEntry<any>> = [];
 
     for await (const res of log) logs.push(res);
     logs.sort().reverse();
