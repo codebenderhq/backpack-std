@@ -14,7 +14,7 @@
 import { generateKeys, getHeaders, getRawKey } from "../lib/vapid/index.js";
 
 const push = async (request:Request): Promise<Response | undefined> => {
-  const { pathname, searchParams }:  = oomph.req(request);
+  const { pathname, searchParams } = oomph.req(request);
 
   const publicKey:string | undefined = Deno.env.get("PUSH_PUBLIC_KEY");
 
