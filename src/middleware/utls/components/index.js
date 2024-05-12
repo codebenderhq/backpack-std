@@ -1,4 +1,4 @@
-import{exists}from "jsr:@std/fs@0.216/exists";
+import { exists } from "jsr:@std/fs@0.216/exists";
 
 export const getComponents = (doc) => {
   const regex = /<([a-z]+-[a-z]+)(\s+[a-z-]+="[^"]*")*\/?>/g;
@@ -75,7 +75,7 @@ export const compileDoc = async (html, elements, path, isProd, req) => {
         break;
       }
     }
- 
+
     if (element_src) {
       const element_atrribute = getComponentsAtributes(element);
       const atrributes = {};

@@ -42,6 +42,7 @@ const asset_middlware = async (request, type) => {
       return await serveFile(request, file_path);
     }
   } catch (err) {
+    console.log(err);
     err.log();
     //    throw new Error("File Does Not Exist");
     return new Response("Internal Server Error", {

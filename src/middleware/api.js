@@ -102,9 +102,10 @@ const api_middleware = async (request) => {
       const searchParam = new URLSearchParams(json);
 
       console.log(json);
+      const param_length = Object.keys(json).length;
       const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
         returnPath ? returnPath : "/status"
-      }?${searchParam.toString()}`;
+      }${param_length ? `?${searchParam.toString()}` : ""}`;
 
       console.log("redirect to", Location);
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
@@ -127,11 +128,13 @@ const api_middleware = async (request) => {
     });
   } catch (err) {
     console.log(err);
-    oomph.logger.info({
-      title: `SERVER:API:ERROR:${request.url}`,
-      msg: err.message,
-      err,
-    });
+    err.log(`SERVER:API:ERROR:${request.url}`);
+    // oomph.logger.info("error",{
+    //   url: request.url,
+    //   title: `SERVER:API:ERROR:${request.url}`,
+    //   msg: err.message,
+    //   err,
+    // });
     throw new Error(`SERVER:API:ERROR:${request.url}`);
   }
 

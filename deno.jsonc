@@ -1,6 +1,5 @@
 {
-    "name": "@oomph/core",
-    "version": "0.0.4",
-    "exports": "./src/mod.js"
-    
+  "name": "@oomph/core",
+  "version": "0.0.4",
+  "exports": "./src/mod.js"
 }

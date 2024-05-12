@@ -3,7 +3,7 @@ const logView = async (request) => {
 
   if (pathname === "/logs" && request.method === "GET") {
     const kv = await Deno.openKv();
-    const log = await kv.list({ prefix: ["Log"] });
+    const log = await kv.list({ prefix: ["logs"] });
 
     //        for await (const entry of log) {
     //            kv.delete(entry.key)

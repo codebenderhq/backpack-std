@@ -3,7 +3,13 @@ import { renderToString } from "npm:react-dom/server";
 
 import { exists } from "https://deno.land/std/fs/mod.ts";
 
-const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
+const AppHeader = (
+  {
+    name = "oomph",
+    icon = "/favicon.png",
+    desc = "For the people who shape culture, Glimpse into the future of trade",
+  },
+) => {
   return (
     <head>
       <meta charSet="UTF-8" />
@@ -20,7 +26,7 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <meta property="og:title" content="Sauveur Dev" />
       <meta
         property="og:description"
-        content="For the people who shape culture."
+        content={desc}
       />
       <meta property="og:image" content="/background.jpg" />
       <meta property="og:url" content="https://sauveur.dev" />
@@ -28,13 +34,13 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
       <meta name="twitter:title" content="Sauveur Dev" />
       <meta
         name="twitter:description"
-        content="For the people who shape culture."
+        content={desc}
       />
       <meta name="twitter:image" content="/background.jpg" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="description"
-        content="For the people who shape culture."
+        content={desc}
       />
 
       {/*https://developer.mozilla.org/en-US/docs/Web/Manifest*/}
@@ -42,7 +48,11 @@ const AppHeader = ({ name = "oomph", icon = "/favicon.png" }) => {
   );
 };
 export default async ({ req, attributes }) => {
-  let manifest = { name: "oomph", icon: "/favicon.png" };
+  let manifest = {
+    name: "oomph",
+    icon: "/favicon.png",
+    description: "For the people who shape culture",
+  };
   const manifest_path = `${window._cwd}/src/public/manifest.json`;
   // console.log(manifest_path, "manifest path");
   // console.log(await exists(manifest_path), "manifest exists");
@@ -54,12 +64,17 @@ export default async ({ req, attributes }) => {
       });
       manifest.name = _manifest.name;
       manifest.icon = _manifest.icons[0].src;
+      manifest.description = _manifest.description;
     }
   } catch (err) {
     console.log("failed to load manifest");
   }
 
   return renderToString(
-    <AppHeader name={manifest.name} icon={manifest.icon} />,
+    <AppHeader
+      name={manifest.name}
+      icon={manifest.icon}
+      desc={manifest.description}
+    />,
   );
 };

@@ -1,4 +1,4 @@
-import{exists}from "jsr:@std/fs@0.216/exists";
+import { exists } from "jsr:@std/fs@0.216/exists";
 import { compileDoc, getComponents } from "./utls/components/index.js";
 
 let isError = false;
@@ -39,9 +39,9 @@ const html_middleware = async (req, isProd) => {
     src = await compileDoc(src, components, paths, isProd, req);
   }
 
-  if (!isProd) {
-    src += hmrScript;
-  }
+  // if (!isProd) {
+  //   src += hmrScript;
+  // }
 
   return html_response(src);
 };
@@ -93,7 +93,7 @@ socket.addEventListener('open', (event) => {
     setTimeout(() => {
         location.reload()
     },1000)
- 
+
 });
 </script>
 `;

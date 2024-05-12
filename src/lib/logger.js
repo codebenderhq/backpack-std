@@ -1,6 +1,9 @@
+import { get_kv } from "./persistence.js";
+
 const logger = async (type, ...body) => {
   try {
-    const kv = await Deno.openKv();
+    const expireIn = 24 * 60 * 60 * 1000;
+    const kv = await get_kv();
     const id = Date.now();
     const key = ["Log", id];
     let value;
@@ -18,7 +21,7 @@ const logger = async (type, ...body) => {
     }
 
     // Persist an object at the users/alice key.
-    await kv.set(key, value);
+    await kv.set(key, value, { expireIn });
   } catch (err) {
     console.error(err.message);
   }

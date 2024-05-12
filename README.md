@@ -6,14 +6,15 @@ It is a way for you to communicate, your beliefs
 
 Express your passion and build value not just for yourself but for others
 
-And that is what oomph aims to help you get right, building solutions that not only improve your life but those of your friends too
+And that is what oomph aims to help you get right, building solutions that not
+only improve your life but those of your friends too
 
 What do you want to build?
 
 ## Getting Started
 
-Below is an example of a simple server using oomph core libaries, that
-servers an html site
+Below is an example of a simple server using oomph core libaries, that servers
+an html site
 
 ```
 import {
@@ -34,15 +35,16 @@ Deno.serve((request) => {
 });
 ```
 
-test out oomph with this [template repo](https://github.com/codebenderhq/sauveur.dev)
+test out oomph with this
+[template repo](https://github.com/codebenderhq/sauveur.dev)
 
-## Guide 
-- Install Visual Studio Code Deno Extension [here](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
+## Guide
+
+- Install Visual Studio Code Deno Extension
+  [here](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
 
 ## Tech Debt
 
 - [ ] migrate to typescript
 - [ ] improve documentation
 - [ ] create visual studio code extension
-
-
