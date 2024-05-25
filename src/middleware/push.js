@@ -10,29 +10,46 @@
 // https://datatracker.ietf.org/doc/html/draft-ietf-webpush-vapid-02#section-4
 // https://datatracker.ietf.org/doc/html/rfc8030#section-8
 // https://blog.mozilla.org/services/2016/04/04/using-vapid-with-webpush/
+// https://github.com/mdn/serviceworker-cookbook/blob/master/push-get-payload/service-worker.js
+
 import { generateKeys, getHeaders, getRawKey } from "../lib/vapid/index.js";
 
-const push = async (request) => {
-  const { pathname, searchParams } = oomph.req(request);
+const push = async (pathname, request) => {
+  if (pathname === "generateKey") {
+    const keys = generateKeys();
+    return Response.json({});
+  }
 
-  const publicKey = Deno.env.get("PUSH_PUBLIC_KEY");
-
-  if (pathname === "/push/vapidPublicKey" && request.method === "GET") {
+  if (pathname === "vapidPublicKey" && request.method === "GET") {
     return new Response(await getRawKey());
   }
 
-  if (pathname === "/push/register" && request.method === "POST") {
-    console.log("you have registerd");
-    return new Response("Registered");
+  if (pathname === "register" && request.method === "POST") {
+    const data = await request.json();
+    const public_id = crypto.randomUUID();
+    const kv = await Deno.openKv("opn");
+
+    await kv.set(["opn", data.subscription.keys.auth], data.subscription);
+    await kv.set(["opn", "public", public_id], data.subscription.keys.auth);
+
+    return new Response(public_id);
   }
 
-  if (pathname === "/push" && request.method === "POST") {
-    const data = await request.json();
-    const subscription = data.subscription;
-    const payload = null;
-    const options = {
-      TTL: data.ttl,
-    };
+  if (pathname === "push" && request.method === "POST") {
+    const { public_id, ttl } = await request.json();
+
+    const kv = await Deno.openKv("opn");
+
+    const opn_auth_key = (await kv.get(["opn", "public", public_id])).value;
+
+    const subscription = (await kv.get(["opn", opn_auth_key])).value;
+
+    if (!subscription) return new Response("Failed To Push", { status: 400 });
+
+    // const payload = null;
+    // const options = {
+    //   TTL: data.ttl,
+    // };
 
     const parsedUrl = new URL(subscription.endpoint);
     const audience = parsedUrl.protocol + "//" +
@@ -44,12 +61,11 @@ const push = async (request) => {
     };
 
     const vapidHeader = await getHeaders(claim);
-    console.log("send push notification");
 
     fetch(subscription.endpoint, {
       method: "POST",
       headers: {
-        ttl: 3600,
+        ttl: ttl || 0,
         "Content-Encoding": "aes128gcm",
         "Authorization": vapidHeader.authorization,
       },

@@ -14,6 +14,7 @@ try {
     Deno.env.get("PUSH_PUBLIC_KEY"),
   );
 } catch (e) {
+  console.log(e);
   console.log("PUSH Notification Not Initialized");
 }
 

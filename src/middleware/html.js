@@ -33,17 +33,25 @@ const html_middleware = async (req, isProd) => {
     ? await Deno.readTextFile(paramPage)
     : `<app-head/><div class="w-screen h-screen flex items-center justify-center">To get lost is to learn the way </h1>`;
 
-  const components = getComponents(src);
+  try {
+    const components = getComponents(src);
 
-  if (components && components.length > 0) {
-    src = await compileDoc(src, components, paths, isProd, req);
+    if (components && components.length > 0) {
+      src = await compileDoc(src, components, paths, isProd, req);
+    }
+  } catch (err) {
+    console.log(err);
+    // src =
+    //   `<app-head/><div class="w-screen h-screen flex items-center justify-center">Uh oh we broke something</h1>`;
+    // const components = getComponents(src);
+    // src = await compileDoc(src, components, paths, isProd, req);
   }
 
   // if (!isProd) {
   //   src += hmrScript;
   // }
 
-  return html_response(src);
+  return html_response(src, req);
 };
 
 const getManifest = async (isProd) => {
@@ -99,7 +107,7 @@ socket.addEventListener('open', (event) => {
 `;
 
 // redirect to 303 error page
-const html_response = (res) => {
+const html_response = (res, req) => {
   // Will check what is up with this HMR
   // ${Deno.env.get('env') ? hmrScript : ''}
   return new Response(`${res}`, {

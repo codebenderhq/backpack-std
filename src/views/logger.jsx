@@ -41,17 +41,21 @@ const Logger = ({ logs }) => {
       </head>
       <body>
         {logs.map((log) => {
-          return (
-            <>
-              <p>{log.value.type}</p>
-              <p>
-                {log.value.data.request.method} {log.value.data.request.uri}
-              </p>
-              <p>
-                {log.value.data.response ? log.value.data.response.status : ""}
-              </p>
-            </>
-          );
+          if (log.value.data && log.value.data.request) {
+            return (
+              <>
+                <p>{log.value.type}</p>
+                <p>
+                  {log.value.data.request.method} {log.value.data.request.uri}
+                </p>
+                <p>
+                  {log.value.data.response
+                    ? log.value.data.response.status
+                    : ""}
+                </p>
+              </>
+            );
+          }
         })}
       </body>
     </html>
@@ -70,7 +74,7 @@ export default async ({ req, attributes }) => {
   for await (const res of log) logs.push(res);
   logs.sort().reverse();
 
-  // console.log(logs)
+  console.log(logs);
   // return new Response(logView);
 
   return new Response(

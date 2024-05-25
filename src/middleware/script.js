@@ -7,6 +7,7 @@ const script_middleware = async (req) => {
   let headers = {};
 
   try {
+    console.log("in script");
     let res = await import(`file:///${app_path}${_pathname}`);
 
     // this is to support deployment to a linux enviroment
@@ -14,12 +15,8 @@ const script_middleware = async (req) => {
       res = await import(`app/${app_path}${_pathname}`);
     }
 
-    console.log("in the script");
     if (res.onServer) {
       onServerResult = await res.onServer(_pathname, req);
-
-      //  check response type
-      console.log(onServerResult instanceof Response);
 
       if (onServerResult instanceof Response) {
         return onServerResult;
