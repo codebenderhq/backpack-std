@@ -6,13 +6,47 @@ import tailwindcss from "npm:tailwindcss@latest";
 // https://lightningcss.dev/docs.html
 import { transform } from "npm:lightningcss@latest";
 
+// https://esbuild.github.io/api/#bundle
+import * as esbuild from "npm:esbuild";
+
+
+
 const asset_middlware = async (request, type) => {
   const _cwd = window._cwd;
   const { pathname } = new URL(request.url);
   //  const isServiceWorker = pathname.includes("sw.js");
   try {
     const content_type = `text/${type}`;
-    const file_path = `${_cwd}/src/public${pathname}`;
+    let file_path = `${_cwd}/src/public${pathname}`;
+
+    if (type === "jsx") {
+        const esbuild_result = await esbuild.build({
+        entryPoints: [`${_cwd}/src/components/${pathname}`],
+        bundle: true,
+        jsxDev: Deno.env.get("env") === "production",
+        target: ["esnext"],
+        jsx: "automatic",
+        loader: { ".js": "jsx" },
+        minify: Deno.env.get("env") === "production",
+        write: false,
+        // outfile: `${_cwd}/src/public/script/${pathname}`,
+        ignoreAnnotations: true,
+      });
+
+      const code = esbuild_result.outputFiles[0].text
+      return new Response(code, {
+        headers: {
+          "content-type": "script",
+          "access-control-allow-origin": "*",
+          "Access-Control-Allow-Headers":
+            "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+        },
+      });
+
+      // console.log(esbuild_result.outputFiles[0].text,"result")
+
+      // file_path = `${_cwd}/src/public/script/${pathname}`;
+    }
 
     // find out if there is a leak here
     if (type === "style") {

@@ -95,25 +95,30 @@ const api_middleware = async (request) => {
     if (request.method === "POST") {
       const returnPath = json.uri;
       const redirectHost = json.redirect;
+      const secondsInDay = 60 * 60 * 24; // 60 seconds/minute * 60 minutes/hour * 24 hours/day
+      const totalSeconds = secondsInDay * 30;
+
+      const expireIn = json.expireIn || totalSeconds;
       delete json.redirect;
+      delete json.expireIn;
       delete json.uri;
       delete json.body;
       delete json.status;
       const searchParam = new URLSearchParams(json);
 
-      console.log(json);
+      // console.log(json);
       const param_length = Object.keys(json).length;
       const Location = `${redirectHost ? `https://${redirectHost}` : ""}${
         returnPath ? returnPath : "/status"
       }${param_length ? `?${searchParam.toString()}` : ""}`;
 
-      console.log("redirect to", Location);
+      // console.log("redirect to", Location);
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
       // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
       const headers = {
         Location,
         "set-cookie": json?.setCookie
-          ? `id=${json.auth};Secure;HttpOnly;SameSite=Lax;Path=/`
+          ? `id=${json.auth};Secure;HttpOnly;Max-Age=${expireIn};SameSite=Lax;Path=/`
           : null,
       };
 

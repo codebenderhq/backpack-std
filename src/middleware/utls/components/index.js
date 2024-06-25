@@ -91,7 +91,15 @@ export const compileDoc = async (html, elements, path, isProd, req) => {
 
       const element_component = await element_src.default({ req, atrributes });
 
-      new_doc = new_doc.replace(element, element_component);
+      if (element_component instanceof ReadableStream) {
+        const streamed_element_component = await new Response(
+          element_component,
+          { headers: { "Content-Type": "text/html" } },
+        ).text();
+        new_doc = new_doc.replace(element, streamed_element_component);
+      } else {
+        new_doc = new_doc.replace(element, element_component);
+      }
     }
   }));
 

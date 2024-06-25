@@ -31,7 +31,7 @@ const html_middleware = async (req, isProd) => {
     ? await Deno.readTextFile(tempSrc)
     : await exists(paramPage)
     ? await Deno.readTextFile(paramPage)
-    : `<app-head/><div class="w-screen h-screen flex items-center justify-center">To get lost is to learn the way </h1>`;
+    : `<app-head/><div class="w-screen h-screen flex items-center justify-center"> <span class="border-r-2 px-2 border-r-black">404</span>To get lost is to learn the way</div></h1>`;
 
   try {
     const components = getComponents(src);

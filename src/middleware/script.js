@@ -1,13 +1,13 @@
 const script_middleware = async (req) => {
   const app_path = window._app;
-  const { pathname: _pathname } = new URL(req.url);
+  const { pathname: _pathname, searchParams } = new URL(req.url);
   console.log(_pathname);
   let onServerResult;
   let prop;
   let headers = {};
 
   try {
-    console.log("in script");
+    // console.log("in script",app_path);
     let res = await import(`file:///${app_path}${_pathname}`);
 
     // this is to support deployment to a linux enviroment
@@ -36,7 +36,8 @@ const script_middleware = async (req) => {
         ...headers,
       },
     });
-  } catch {
+  } catch (err) {
+    console.log(err);
     return new Response("script file unavailible");
   }
 };
