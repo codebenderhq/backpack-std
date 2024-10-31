@@ -8,6 +8,7 @@ const logger = async (type, ...body) => {
     const key = ["Log", id];
     let value;
 
+ 
     if (typeof body[0] === "object") {
       value = {
         type: type ? type : "info",

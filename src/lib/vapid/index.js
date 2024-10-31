@@ -1,7 +1,7 @@
 import { DERLite } from "./der.js";
-import { VapidToken02 } from "./vapid.js";
+import { VapidToken01, VapidToken02 } from "./vapid.js";
 
-const vapidToken = new VapidToken02();
+const vapidToken = new VapidToken01();
 const importer = new DERLite();
 
 try {
@@ -38,6 +38,7 @@ export const getHeaders = async (claim) => {
   const claims = {
     sub: claim.sub,
     aud: claim.aud,
+    exp: Math.floor((Date.now() / 1000) + (12 * 60 * 60)),
   };
 
   try {

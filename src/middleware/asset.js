@@ -9,8 +9,6 @@ import { transform } from "npm:lightningcss@latest";
 // https://esbuild.github.io/api/#bundle
 import * as esbuild from "npm:esbuild";
 
-
-
 const asset_middlware = async (request, type) => {
   const _cwd = window._cwd;
   const { pathname } = new URL(request.url);
@@ -20,7 +18,7 @@ const asset_middlware = async (request, type) => {
     let file_path = `${_cwd}/src/public${pathname}`;
 
     if (type === "jsx") {
-        const esbuild_result = await esbuild.build({
+      const esbuild_result = await esbuild.build({
         entryPoints: [`${_cwd}/src/components/${pathname}`],
         bundle: true,
         jsxDev: Deno.env.get("env") === "production",
@@ -29,14 +27,17 @@ const asset_middlware = async (request, type) => {
         loader: { ".js": "jsx" },
         minify: Deno.env.get("env") === "production",
         write: false,
+        define: {
+          "process.env.DEV": "true",
+        },
         // outfile: `${_cwd}/src/public/script/${pathname}`,
         ignoreAnnotations: true,
       });
 
-      const code = esbuild_result.outputFiles[0].text
+      const code = esbuild_result.outputFiles[0].text;
       return new Response(code, {
         headers: {
-          "content-type": "script",
+          "content-type": "text/javascript",
           "access-control-allow-origin": "*",
           "Access-Control-Allow-Headers":
             "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
@@ -47,6 +48,33 @@ const asset_middlware = async (request, type) => {
 
       // file_path = `${_cwd}/src/public/script/${pathname}`;
     }
+
+    // temporary until push is solved
+
+    // if( type === "googleMessaging"){
+    //   const esbuild_result = await esbuild.build({
+    //     entryPoints: [`${_cwd}/src/public/firebase-messaging-sw.js`],
+    //     bundle: true,
+    //     jsxDev: Deno.env.get("env") === "production",
+    //     target: ["esnext"],
+    //     // jsx: "automatic",
+    //     // loader: { ".js": "jsx" },
+    //     minify: Deno.env.get("env") === "production",
+    //     write: false,
+    //     // outfile: `${_cwd}/src/public/script/${pathname}`,
+    //     ignoreAnnotations: true,
+    //   });
+
+    //   const code = esbuild_result.outputFiles[0].text;
+    //   return new Response(code, {
+    //     headers: {
+    //       "content-type": "text/javascript",
+    //       "access-control-allow-origin": "*",
+    //       "Access-Control-Allow-Headers":
+    //         "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+    //     },
+    //   });
+    // }
 
     // find out if there is a leak here
     if (type === "style") {

@@ -40,23 +40,73 @@ const Logger = ({ logs }) => {
         {/*https://developer.mozilla.org/en-US/docs/Web/Manifest*/}
       </head>
       <body>
-        {logs.map((log) => {
-          if (log.value.data && log.value.data.request) {
+        <div className="w-full flex relative">
+          
+          <div className="p-2 rounded">
+
+          </div>
+          <div className="flex flex-col flex-grow  h-screen overflow-y-scroll">
+          {logs.map((log, key) => {
+          if (log.value.data) {
             return (
               <>
+               <div className="p-2 rounded shadow ">
                 <p>{log.value.type}</p>
-                <p>
-                  {log.value.data.request.method} {log.value.data.request.uri}
-                </p>
+                {log.value.data.request ? 
+                  <p>
+                   {log.value.data.request.method} {log.value.data.request.uri}
+                  </p> : <></>
+                }
+
+                {log.value.data.message ? 
+                  <p>
+                   {log.value.data.message}
+                  </p> : <></>
+                }
                 <p>
                   {log.value.data.response
-                    ? log.value.data.response.status
+                    ? <>
+                     <p>{log.value.data.response.status}</p>
+                      { log.value.data.response.body ?
+                     <div className="flex flex-col">
+                      <a href={`#${key}`} className="">view response</a>
+                     </div> : " "}
+                    </>
                     : ""}
                 </p>
+              </div>
+              
+              <div id={key} className="w-1/3 p-4 mr-4 rounded shadow h-screen bg-white hidden target:flex absolute inset-y-0 right-0 overflow-hidden overflow-y-scroll">
+                <div className="flex flex-col">
+               
+                {log.value.data.request ? 
+                 <h1 className="text-wrap">
+                   {log.value.data.request.method} {log.value.data.request.uri}
+                   </h1>: <></>
+                }
+
+                {log.value.data.response ?   <div className="w-64 h-96 p-4 relative overflow-hidden overflow-x-scroll text-xs">
+                  {JSON.stringify(log.value.data.response.body)}
+                </div> : <></>}
+                
+              
+             
+                </div>
+               
+              </div>
               </>
+             
             );
           }
         })}
+
+          </div>
+
+          <div className="p-2 rounded">
+
+          </div>
+        </div>
+       
       </body>
     </html>
   );
@@ -74,7 +124,12 @@ export default async ({ req, attributes }) => {
   for await (const res of log) logs.push(res);
   logs.sort().reverse();
 
-  console.log(logs);
+  // logs.forEach(log => {
+  //   // console.log(log.value.data.response)
+  //   if(log.value.data.response && log.value.data.response.body){
+  //     console.log(log.value.data.response.body)
+  //   }
+  // })
   // return new Response(logView);
 
   return new Response(

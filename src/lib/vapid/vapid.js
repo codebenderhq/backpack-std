@@ -319,7 +319,7 @@ class VapidCore {
   }
 }
 
-class VapidToken01 extends VapidCore {
+export class VapidToken01 extends VapidCore {
   sign(claims) {
     return this._sign(claims)
       .then((elements) => {

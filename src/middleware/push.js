@@ -51,9 +51,9 @@ const push = async (pathname, request) => {
     //   TTL: data.ttl,
     // };
 
-    const parsedUrl = new URL(subscription.endpoint);
-    const audience = parsedUrl.protocol + "//" +
-      parsedUrl.host;
+    const audience = new URL(subscription.endpoint).origin;
+    // const audience = parsedUrl.protocol + "//" +
+    //   parsedUrl.host;
 
     const claim = {
       aud: audience,
@@ -62,16 +62,19 @@ const push = async (pathname, request) => {
 
     const vapidHeader = await getHeaders(claim);
 
+    // console.log(subscription,vapidHeader)
     fetch(subscription.endpoint, {
       method: "POST",
       headers: {
         ttl: ttl || 0,
         "Content-Encoding": "aes128gcm",
         "Authorization": vapidHeader.authorization,
+        "Crypto-Key": vapidHeader["crypto-key"],
       },
-      //       body:encrypted
+      // body: "hello"
     });
 
+    // console.log(response)
     return new Response("Pushed Attempted", { status: 201 });
   }
 };
