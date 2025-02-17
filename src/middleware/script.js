@@ -1,5 +1,5 @@
 const script_middleware = async (req) => {
-  const app_path = window._app;
+  const app_path = globalThis._app;
   const { pathname: _pathname, searchParams } = new URL(req.url);
   console.log(_pathname);
   let onServerResult;

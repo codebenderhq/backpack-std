@@ -53,7 +53,7 @@ export default async ({ req, attributes }) => {
     icon: "/favicon.png",
     description: "For the people who shape culture",
   };
-  const manifest_path = `${window._cwd}/src/public/manifest.json`;
+  const manifest_path = `${globalThis._cwd}/src/public/manifest.json`;
   // console.log(manifest_path, "manifest path");
   // console.log(await exists(manifest_path), "manifest exists");
 

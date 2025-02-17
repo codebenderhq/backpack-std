@@ -2,11 +2,11 @@ import { MozCommon } from "./common.js";
 
 try {
   if (webCrypto === undefined) {
-    webCrypto = window.crypto.subtle;
+    webCrypto = globalThis.crypto.subtle;
   }
 } catch (e) {
   console.log(e);
-  var webCrypto = window.crypto.subtle;
+  var webCrypto = globalThis.crypto.subtle;
 }
 
 export class DERLite {
@@ -126,7 +126,7 @@ export class DERLite {
         let point = "\x00\x04" +
           String.fromCharCode.apply(null, xv) +
           String.fromCharCode.apply(null, yv);
-        window.Kpoint = point;
+        globalThis.Kpoint = point;
         // a combination of the oid_ecPublicKey + p256 encoded oid
         let prefix = "\x30\x13" + // sequence + length
           "\x06\x07" + "\x2a\x86\x48\xce\x3d\x02\x01" +

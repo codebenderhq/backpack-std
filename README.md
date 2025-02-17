@@ -26,7 +26,7 @@ import {
 Deno.serve((request) => {
      let { pathname } = new URL(request.url);
      
-     window._app = `${Deno.cwd()}/src/_app`
+     globalThis._app = `${Deno.cwd()}/src/_app`
      if(pathname.includes('.')){
       return asset_middlware(request);
      }else{

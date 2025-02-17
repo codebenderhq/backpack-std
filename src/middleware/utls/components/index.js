@@ -17,10 +17,10 @@ const globalElements = ["app-head"];
 export const compileDoc = async (html, elements, path, isProd, req) => {
   let new_doc = html;
   let shell_doc;
-  const app_source = window._cwd;
+  const app_source = globalThis._cwd;
 
   const app_shell_exp = /<!--content shell-->([\s\S]*?)<!--content shell-->/;
-  const index_shell = `${window._app}/index.html`;
+  const index_shell = `${globalThis._app}/index.html`;
   const shell = await Deno.readTextFile(index_shell);
 
   const match = shell.match(app_shell_exp);

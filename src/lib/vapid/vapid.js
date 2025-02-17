@@ -6,11 +6,11 @@ import { MozCommon } from "./common.js";
  */
 try {
   if (webCrypto === undefined) {
-    webCrypto = window.crypto.subtle;
+    webCrypto = globalThis.crypto.subtle;
   }
 } catch (e) {
   console.log(e);
-  var webCrypto = window.crypto.subtle;
+  var webCrypto = globalThis.crypto.subtle;
 }
 
 class VapidCore {

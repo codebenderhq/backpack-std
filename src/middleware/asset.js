@@ -10,13 +10,14 @@ import { transform } from "npm:lightningcss@latest";
 import * as esbuild from "npm:esbuild";
 
 const asset_middlware = async (request, type) => {
-  const _cwd = window._cwd;
+  const _cwd = globalThis._cwd;
   const { pathname } = new URL(request.url);
   //  const isServiceWorker = pathname.includes("sw.js");
   try {
     const content_type = `text/${type}`;
     let file_path = `${_cwd}/src/public${pathname}`;
 
+    console.log(pathname)
     if (type === "jsx") {
       const esbuild_result = await esbuild.build({
         entryPoints: [`${_cwd}/src/components/${pathname}`],
@@ -30,6 +31,7 @@ const asset_middlware = async (request, type) => {
         define: {
           "process.env.DEV": "true",
         },
+        platform: "browser",
         // outfile: `${_cwd}/src/public/script/${pathname}`,
         ignoreAnnotations: true,
       });

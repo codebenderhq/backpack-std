@@ -15,7 +15,7 @@ const authenticate = async (pathname, request) => {
   if (!isAuthenticated(request)) {
     const { pathname } = new URL(request.url);
 
-    window.space = {
+    globalThis.space = {
       getAuthToken,
     };
 
@@ -32,7 +32,7 @@ const authenticate = async (pathname, request) => {
       },
     );
 
-    window._cwd = `${
+    globalThis._cwd = `${
       Deno.env.get("MAIN_PATH")
         ? `${Deno.env.get("MAIN_PATH")}app.sauveur.dev`
         : "/apps/home/app.sauveur.xyz"

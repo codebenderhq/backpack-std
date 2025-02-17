@@ -13,8 +13,8 @@ import { create, insert, persist, remove, restore, search } from "./deps.js";
  * @param {NumberLike} x - The magic number.
  */
 const get_kv = async () => {
-  const app_root = window._cwd;
-  const db_path = window.isQARequest ? "qa-db" : "db";
+  const app_root = globalThis._cwd;
+  const db_path = globalThis.isQARequest ? "qa-db" : "db";
 
   const kv_path = app_root && Deno.build.os !== "windows"
     ? `${app_root}/${db_path}/`

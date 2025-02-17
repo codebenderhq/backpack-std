@@ -5,7 +5,7 @@ let isError = false;
 let errorPath;
 
 const html_middleware = async (req, isProd) => {
-  const app_path = window._app;
+  const app_path = globalThis._app;
   const paths = new URL(req.url).pathname.replace(/\/$/, "");
   let src;
   const pathArrays = paths
@@ -34,8 +34,10 @@ const html_middleware = async (req, isProd) => {
     : `<app-head/><div class="w-screen h-screen flex items-center justify-center"> <span class="border-r-2 px-2 border-r-black">404</span>To get lost is to learn the way</div></h1>`;
 
   try {
+ 
     const components = getComponents(src);
 
+  
     if (components && components.length > 0) {
       src = await compileDoc(src, components, paths, isProd, req);
     }
@@ -55,7 +57,7 @@ const html_middleware = async (req, isProd) => {
 };
 
 const getManifest = async (isProd) => {
-  const app_path = window._app;
+  const app_path = globalThis._app;
   let manifest_path = `file:///${app_path}/src/public/manifest.json`;
 
   if (!Deno.build.os === "windows" && isProd) {
@@ -66,7 +68,7 @@ const getManifest = async (isProd) => {
 
   if (exists(manifest_path)) {
     const { default: _manifest } = await import(
-      `${window._cwd}/src/public/manifest.json`,
+      `${globalThis._cwd}/src/public/manifest.json`,
       {
         assert: {
           type: "json",

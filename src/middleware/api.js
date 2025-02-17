@@ -49,7 +49,7 @@ const get_data = async (request) => {
 };
 
 const api_middleware = async (request) => {
-  const app_path = window._app;
+  const app_path = globalThis._app;
   const { pathname } = new URL(request.url);
 
   let response;
@@ -59,6 +59,7 @@ const api_middleware = async (request) => {
     const host = request.headers.get("host");
     const { protocol } = new URL(request.url);
     const referer = request.headers.get("referer");
+    const x_path = request.headers.get("x-path");
     const paths = pathname.split("/");
     let subPath = "";
     if (paths.length > 3) {
@@ -67,6 +68,7 @@ const api_middleware = async (request) => {
 
     const apiPath = `${paths.reverse().join("/")}${subPath}`;
 
+    console.log("hello world", request)
     // added server cors
     // if (!is_authenticated(auth) && !isFormType) {
     //   throw new Error("Unotharized");
@@ -86,13 +88,15 @@ const api_middleware = async (request) => {
       api_path = `app/${api_src}`;
     }
 
+    const headers = {}
+
     const { default: apiMethod } = await import(api_path);
     const json = await apiMethod(request, data.result);
 
     const status = json.status;
     delete json.status;
 
-    if (request.method === "POST") {
+    if (request.method === "GET") {
       const returnPath = json.uri;
       const redirectHost = json.redirect;
       const secondsInDay = 60 * 60 * 24; // 60 seconds/minute * 60 minutes/hour * 24 hours/day
@@ -115,21 +119,28 @@ const api_middleware = async (request) => {
       // console.log("redirect to", Location);
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
       // https://developer.mozilla.org/en-US/docs/Web/Security/Types_of_attacks#session_fixation
-      const headers = {
-        Location,
-        "set-cookie": json?.setCookie
-          ? `id=${json.auth};Secure;HttpOnly;Max-Age=${expireIn};SameSite=Lax;Path=/`
-          : null,
-      };
 
-      return new Response(null, {
-        status: 302,
-        headers,
-      });
+      headers.Location = Location
+      headers["set-cookie"] = json?.setCookie
+      ? `id=${json.auth};Secure;HttpOnly;Max-Age=${expireIn};SameSite=Lax;Path=/`
+      : null
+
+      if(redirectHost){
+        return new Response(null, {
+          status: 302,
+          headers,
+        });
+      }
+     
     }
+
+    headers["set-cookie"] = json?.setCookie
+    ? `id=${json.auth};Secure;HttpOnly;Max-Age=${json.expireIn};SameSite=Lax;Path=/`
+    : null,
 
     response = Response.json(json, {
       status,
+      headers
     });
   } catch (err) {
     console.log(err);
